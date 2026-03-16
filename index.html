@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDO FIRE - PT. New Trifindo Utama | Manufaktur Mobil Damkar & Proteksi Kebakaran</title>
+    <meta name="description" content="PT. New Trifindo Utama (FINDO FIRE) adalah spesialis manufaktur mobil pemadam kebakaran, perakitan baru & rekondisi, serta instalasi Fire Protection System di Bekasi, Jawa Barat.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        findored: {
+                            DEFAULT: '#D32F2F', // Fire Red
+                            dark: '#B71C1C',
+                            light: '#EF5350'
+                        },
+                        findodark: {
+                            DEFAULT: '#1E1E1E', // Industrial Dark
+                            light: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Hero Overlay */
+        .hero-overlay {
+            background: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.5));
+        }
+        /* Hide scrollbar for clean look in galleries */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+            display: flex;
+            width: max-content;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased bg-gray-50">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-findored rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-heading font-bold text-xl text-findodark leading-none tracking-tight">FINDO FIRE</h1>
+                        <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider hidden sm:block">PT. New Trifindo Utama</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="font-medium text-gray-600 hover:text-findored transition">Beranda</a>
+                    <a href="#about" class="font-medium text-gray-600 hover:text-findored transition">Tentang Kami</a>
+                    <a href="#services" class="font-medium text-gray-600 hover:text-findored transition">Produk & Layanan</a>
+                    <a href="#contact" class="font-medium text-gray-600 hover:text-findored transition">Kontak</a>
+                    <a href="#" class="font-medium text-gray-600 hover:text-findored transition">INAPROC</a>
+                    <a href="#contact" class="bg-findored hover:bg-findored-dark text-white px-5 py-2.5 rounded-md font-medium transition shadow-lg shadow-red-500/30">Hubungi Kami</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-findored focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="#home" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Beranda</a>
+                <a href="#about" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Tentang Kami</a>
+                <a href="#services" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Produk & Layanan</a>
+                <a href="#contact" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Kontak</a>
+                <a href="#" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">INAPROC</a>
+                <a href="#contact" class="block mt-4 text-center bg-findored text-white px-3 py-3 rounded-md text-base font-medium shadow-md">Hubungi Kami</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-24 pb-20 md:pt-32 md:pb-48 overflow-hidden min-h-screen flex items-center">
+        <!-- Background Image Mobil Pemadam Kebakaran -->
+        <div class="absolute inset-0 z-0">
+            <img src="assets/hero.jpg" alt="Mobil Pemadam Kebakaran FINDO FIRE" class="w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center lg:text-left flex flex-col lg:flex-row items-center w-full mt-10 lg:mt-0">
+            <div class="w-full lg:w-2/3">
+                <span class="inline-block py-1 px-3 rounded-full bg-findored/20 border border-findored/50 text-red-400 font-semibold text-xs sm:text-sm mb-6 tracking-wide uppercase">
+                    Pakar Proteksi Kebakaran Industri
+                </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
+                    Solusi Terpadu <br class="hidden lg:block"/>
+                    <span class="text-findored">Kendaraan Pemadam</span> <br class="block sm:hidden"/> & Sistem Proteksi.
+                </h1>
+                <p class="text-base sm:text-lg lg:text-xl text-white drop-shadow-md mb-10 max-w-2xl mx-auto lg:mx-0 font-medium px-2 sm:px-0">
+                    PT. New Trifindo Utama hadir melindungi aset berharga Anda. Kami memproduksi mobil pemadam berkualitas, rekondisi, serta instalasi Fire Protection System berstandar tinggi.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#contact" class="bg-findored hover:bg-findored-dark text-white px-6 sm:px-8 py-4 rounded-md font-semibold transition text-base sm:text-lg shadow-lg shadow-red-500/40 flex items-center justify-center gap-2">
+                        Dapatkan Penawaran <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#services" class="bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-sm text-white px-6 sm:px-8 py-4 rounded-md font-semibold transition text-base sm:text-lg flex items-center justify-center">
+                        Lihat Katalog Produk
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quick Stats/Trust Badge on Desktop -->
+            <div class="hidden lg:flex w-full lg:w-1/3 justify-end mt-12 lg:mt-0">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl w-full max-w-sm text-center">
+                    <i class="fa-solid fa-shield-halved text-5xl text-findored mb-4"></i>
+                    <h3 class="text-2xl font-heading font-bold text-white mb-2">Keamanan & Kualitas</h3>
+                    <p class="text-gray-300 mb-6">Dipercaya oleh instansi pemerintah dan perusahaan swasta di seluruh Indonesia.</p>
+                    <div class="grid grid-cols-2 gap-4 border-t border-white/20 pt-6">
+                        <div>
+                            <p class="text-3xl font-bold text-white">50+</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Unit Terkirim</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-white">100%</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Standar Safety</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-20 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                <div class="w-full lg:w-1/2 relative order-2 lg:order-1">
+                    <div class="absolute inset-0 bg-findored rounded-2xl transform translate-x-4 translate-y-4 opacity-20 hidden sm:block"></div>
+                    <img src="assets/tentang.jpg" alt="Workshop PT New Trifindo Utama" class="relative rounded-2xl shadow-xl w-full object-cover h-[300px] sm:h-[400px]">
+                    <div class="absolute -bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white p-3 sm:p-4 rounded-xl shadow-lg flex items-center gap-3 sm:gap-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-findored text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm text-gray-500 font-semibold">Workshop Resmi</p>
+                            <p class="font-bold text-findodark text-sm sm:text-base">Bekasi Timur</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 order-1 lg:order-2">
+                    <h4 class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Tentang Perusahaan</h4>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-6">Mitra Terpercaya Untuk Perlindungan Kebakaran Yang Optimal</h2>
+                    <p class="text-gray-600 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
+                        <strong>PT. NEW TRIFINDO UTAMA</strong> dengan brand <strong>FINDO FIRE</strong> adalah perusahaan manufaktur dan penyedia jasa yang berfokus pada bidang Fire Fighting, Fire Protection System & Fire Equipment. Kami memiliki dedikasi penuh untuk menghadirkan peralatan keselamatan yang handal, kokoh, dan sesuai standar keamanan nasional maupun internasional.
+                    </p>
+                    <p class="text-gray-600 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
+                        Berlokasi di Mustika Jaya, Bekasi Timur, workshop kami dilengkapi dengan tenaga ahli berpengalaman dalam merakit mobil pemadam baru, melakukan rekondisi armada lama, hingga merancang dan memasang instalasi proteksi kebakaran (Hydrant, CO2, Alarm, dan APAR) untuk pabrik, gedung bertingkat, dan area industri.
+                    </p>
+                    <ul class="space-y-3 sm:space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-findored mt-1"></i>
+                            <span class="text-gray-700 text-sm sm:text-base"><strong>Pabrikasi Mandiri:</strong> Kualitas material plat dan tangki terjamin.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-findored mt-1"></i>
+                            <span class="text-gray-700 text-sm sm:text-base"><strong>Teknisi Tersertifikasi:</strong> Pengerjaan mekanikal & elektrikal presisi.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-findored mt-1"></i>
+                            <span class="text-gray-700 text-sm sm:text-base"><strong>Layanan Purna Jual:</strong> Garansi fungsi pompa dan service berkala.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-findored mt-1"></i>
+                            <span class="text-gray-700 text-sm sm:text-base"><strong>Peralatan Lengkap:</strong> Didukung dengan peralatan yang lengkap.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-findored mt-1"></i>
+                            <span class="text-gray-700 text-sm sm:text-base"><strong>Layanan 24 Jam:</strong> Layanan konsultasi 24 jam.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services & Products Section -->
+    <section id="services" class="py-16 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                <h4 class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Katalog & Layanan</h4>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-4">Produk & Solusi Proteksi Kebakaran</h2>
+                <p class="text-gray-600 text-sm sm:text-base px-2">Kami menyediakan layanan hulu ke hilir untuk kebutuhan pemadaman api, mulai dari armada kendaraan hingga peralatan safety perorangan.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div class="h-56 sm:h-64 overflow-hidden relative">
+                        <img src="assets/Fire Truck Manufacture.jpg" alt="Mobil Pemadam Kebakaran" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <i class="fa-solid fa-truck-fast text-2xl mb-2 text-findored-light"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                        <h3 class="text-xl font-heading font-bold text-findodark mb-3">Fire Truck Manufacture</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3 text-sm sm:text-base flex-1">Spesialisasi perakitan mobil pemadam kebakaran baru dari berbagai sasis (Hino, Isuzu, Mitsubishi) dan jasa rekondisi/rebuild mobil damkar lama agar kembali prima.</p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-2 border-t pt-4">
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Fire Jeep / Rapid Intervention</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Fire Trucks 3.000 – 10.000 L</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Water Tank & Vacuum Trucks</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Motorcycle Fire Fighting</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Skylift & Ledder Vehicle</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div class="h-56 sm:h-64 overflow-hidden relative">
+                        <!-- Menggunakan gambar instalasi pipa hydrant -->
+                        <img src="assets/Fire Protection System.jpg" alt="Fire Protection System" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <i class="fa-solid fa-fire-extinguisher text-2xl mb-2 text-findored-light"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                        <h3 class="text-xl font-heading font-bold text-findodark mb-3">Fire Protection System</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3 text-sm sm:text-base flex-1">Instalasi sistem proteksi kebakaran statis untuk perlindungan aset gedung, pabrik, dan gudang. Dilengkapi dengan kontrol panel yang presisi.</p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-2 border-t pt-4">
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Instalasi Fire Hydrant & Sprinkler</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> FM200 & CO2 Suppression System</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Fire Alarm System Terintegrasi</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col md:col-span-2 lg:col-span-1">
+                    <div class="h-56 sm:h-64 overflow-hidden relative">
+                        <img src="assets/Equipment & Rescue.jpg" alt="Peralatan Pemadam" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <i class="fa-solid fa-helmet-safety text-2xl mb-2 text-findored-light"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                        <h3 class="text-xl font-heading font-bold text-findodark mb-3">Equipment & Rescue</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3 text-sm sm:text-base flex-1">Penyediaan perlengkapan pemadam kebakaran portabel dan peralatan rescue untuk tim safety internal perusahaan dan petugas profesional.</p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-2 border-t pt-4">
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> APAR</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Fire Hose, Nozzle, Valve, Box Hydrant</li>
+                            <li><i class="fa-solid fa-angle-right text-findored mr-2"></i> Baju tahan panas, SCBA, Alat Rescue, & Safety Equipment</li>
+                        </ul>
+                    </div>
+                </div>
+    <!-- Services & Products Section -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sertifikat Perusahaan Section -->
+    <section id="certificates" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                <h4 class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Legalitas & Standar</h4>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-4">Sertifikat Perusahaan</h2>
+                <p class="text-gray-600 text-sm sm:text-base px-2">Komitmen kami terhadap kualitas dan keselamatan operasional dibuktikan melalui sertifikasi nasional dan internasional.</p>
+            </div>
+
+            <!-- Grid Sertifikat Dummies -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 justify-items-center">
+                
+                <!-- Certificate 1: ISO 9001 -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-ribbon text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">ISO 9001:2015</h3>
+                    <p class="text-xs text-gray-500">Quality Management Systems</p>
+                </div>
+
+                <!-- Certificate 2: ISO 14001 -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-leaf text-3xl text-green-500"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">ISO 14001:2015</h3>
+                    <p class="text-xs text-gray-500">Environmental Management</p>
+                </div>
+
+                <!-- Certificate 3: ISO 45001 -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-helmet-safety text-3xl text-yellow-500"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">ISO 45001:2018</h3>
+                    <p class="text-xs text-gray-500">Occupational Health & Safety</p>
+                </div>
+
+                <!-- Certificate 4: NFPA Member -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-fire text-3xl text-findored"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">NFPA</h3>
+                    <p class="text-xs text-gray-500">National Fire Protection Association Member</p>
+                </div>
+
+                 <!-- Certificate 5: SNI -->
+                 <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-id-card-clip text-3xl text-gray-700"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">SNI</h3>
+                    <p class="text-xs text-gray-500">Standar Nasional Indonesia untuk Peralatan Pemadam</p>
+                </div>
+
+                <!-- Certificate 6: KAN -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-stamp text-3xl text-indigo-500"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">KAN Accredited</h3>
+                    <p class="text-xs text-gray-500">Komite Akreditasi Nasional</p>
+                </div>
+
+                <!-- Certificate 7:  K3 Umum -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full md:col-span-1 lg:col-span-1">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-user-shield text-3xl text-teal-600"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">AHLI K3 UMUM</h3>
+                    <p class="text-xs text-gray-500">Sertifikasi Kemnaker RI</p>
+                </div>
+                
+                 <!-- Certificate 8:  K3 Kebakaran -->
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full md:col-span-1 lg:col-span-1">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                        <i class="fa-solid fa-fire-extinguisher text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="font-bold text-findodark mb-1">AHLI K3 KEBAKARAN</h3>
+                    <p class="text-xs text-gray-500">Tingkat A, B, C & D Kemnaker RI</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section class="py-12 sm:py-16 bg-findodark relative overflow-hidden text-center md:text-left">
+        <!-- Abstract Pattern Background -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#D32F2F 1px, transparent 1px); background-size: 20px 20px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white mb-2">Butuh Unit Mobil Damkar Kustom?</h2>
+                <p class="text-gray-400 text-sm sm:text-lg">Konsultasikan spesifikasi teknis dan anggaran proyek Anda bersama tim ahli kami.</p>
+            </div>
+            <div class="w-full md:w-auto">
+                <a href="https://wa.me/6281310007326" target="_blank" class="w-full sm:w-auto justify-center bg-white text-findodark hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 rounded-md font-bold transition text-base sm:text-lg shadow-lg flex items-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-green-500 text-2xl"></i> Hubungi via WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Location Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Hubungi Kami</h4>
+                    <h2 class="text-3xl font-heading font-bold text-findodark mb-6 sm:mb-8">Kunjungi Workshop Kami atau Kirimkan Pesan</h2>
+                    
+                    <div class="space-y-4 sm:space-y-6 mb-8">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Workshop & Kantor Pusat</h4>
+                                <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
+                                    Jl. Mandor Demong no. 9, Kel. Mustikasari,<br>
+                                    Mustika Jaya, Kec. Bekasi Timur,<br>
+                                    Kota Bekasi, Jawa Barat.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-brands fa-whatsapp text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Telepon & WhatsApp</h4>
+                                <p class="text-gray-600 text-sm sm:text-base">
+                                    <a href="https://wa.me/6281310007326" target="_blank" class="hover:text-findored transition">0813-1000-7326</a>
+                                </p>
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">Layanan Konsultasi 24/7 (Darurat & Proyek)</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-solid fa-envelope text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Email Inquiry</h4>
+                                <p class="text-gray-600 text-sm sm:text-base">
+                                    <a href="mailto:info@findofire.com" class="hover:text-findored transition">info@findofire.com</a>
+                                    <span class="text-xs sm:text-sm text-gray-400 block">(Contoh/TBD)</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simple Form (UI Only) -->
+                    <form class="space-y-4 bg-gray-50 p-5 sm:p-6 rounded-xl border border-gray-100">
+                        <h4 class="font-bold text-gray-900 mb-2 sm:mb-4 text-sm sm:text-base">Minta Penawaran Harga (Quotation)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" placeholder="Nama / Instansi" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base">
+                            <input type="text" placeholder="Nomor Telepon" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base">
+                        </div>
+                        <select class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-gray-600 text-sm sm:text-base">
+                            <option value="">-- Pilih Layanan yang Dibutuhkan --</option>
+                            <option value="Mobil Baru">Pembuatan Mobil Pemadam Baru</option>
+                            <option value="Rekondisi">Rekondisi/Service Mobil Damkar</option>
+                            <option value="Hydrant">Instalasi Hydrant / Protection System</option>
+                            <option value="APAR">Pembelian APAR / Peralatan Rescue</option>
+                        </select>
+                        <textarea rows="3" placeholder="Pesan atau Detail Spesifikasi..." class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base"></textarea>
+                        <button type="button" onclick="window.open('https://wa.me/6281310007326', '_blank')" class="w-full bg-findodark hover:bg-black text-white px-4 py-3 rounded-md font-semibold transition text-sm sm:text-base">Kirim Pesan via WhatsApp</button>
+                    </form>
+                </div>
+
+                <!-- Google Maps Embed -->
+                <div class="h-[300px] sm:h-full min-h-[300px] sm:min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 order-first lg:order-last mb-6 lg:mb-0">
+                    <!-- Menggunakan keyword pencarian "PT. New Trifindo Utama Bekasi" untuk iframe -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.9220972412586!2d107.0216659!3d-6.2739462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698e3b33075c75%3A0xc3f6e1df7f73db50!2sJl.%20Mandor%20Demong%20No.9%2C%20RT.004%2FRW.003%2C%20Mustikasari%2C%20Kec.%20Mustika%20Jaya%2C%20Kota%20Bks%2C%20Jawa%20Barat%2017157!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar Section -->
+    <section class="py-4 bg-gray-100 border-t border-b border-gray-200 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 text-center">
+             <h4 class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-widest">Dipercaya Oleh Berbagai Instansi & Perusahaan Nasional</h4>
+        </div>
+        <div class="relative w-full overflow-hidden flex items-center bg-gray-100">
+            <!-- Gradient Overlays for smooth fade effect at edges -->
+            <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
+            
+            <div class="animate-marquee whitespace-nowrap py-1 flex gap-6 sm:gap-12 items-center">
+                <!-- Group 1 -->
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">KEMENTERIAN PERHUBUNGAN</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PERTAMINA (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">ANGKASA PURA II</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. BUKIT ASAM TBK</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PLN (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. INDOFOOD</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PEMDA JAWA BARAT</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. KRAKATAU STEEL</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PELINDO III</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. ASTRA AGRO LESTARI</span>
+
+                <!-- Group 2 (Duplicate for seamless loop) -->
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">KEMENTERIAN PERHUBUNGAN</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PERTAMINA (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">ANGKASA PURA II</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. BUKIT ASAM TBK</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PLN (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. INDOFOOD</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PEMDA JAWA BARAT</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. KRAKATAU STEEL</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PELINDO III</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. ASTRA AGRO LESTARI</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-findodark text-gray-300 pt-16 pb-8 border-t-4 border-findored">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 mb-10 sm:mb-12">
+                
+                <!-- Brand Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 bg-findored rounded flex items-center justify-center text-white font-bold">
+                            <i class="fa-solid fa-fire-flame-curved text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-heading font-bold text-xl text-white leading-none">FINDO FIRE</h2>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-6">Mitra terpercaya manufaktur kendaraan pemadam kebakaran dan sistem proteksi untuk perlindungan maksimal aset Anda.</p>
+                    <div class="flex space-x-4">
+                        <!-- Social Media placeholders -->
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Tautan Cepat</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#home" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Beranda</a></li>
+                        <li><a href="#about" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Tentang Perusahaan</a></li>
+                        <li><a href="#services" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Katalog Produk</a></li>
+                        <li><a href="#contact" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Kontak</a></li>
+                        <li><a href="#" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> INAPROC</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Layanan Utama</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><span class="text-gray-400"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> Perakitan Mobil Damkar</span></li>
+                        <li><span class="text-gray-400"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> Rekondisi Armada</span></li>
+                        <li><span class="text-gray-400"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> Instalasi Hydrant</span></li>
+                        <li><span class="text-gray-400"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> CO2 & Alarm System</span></li>
+                        <li><span class="text-gray-400"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> Suplai APAR & Rescue</span></li>
+                    </ul>
+                </div>
+
+                <!-- Office -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Workshop / Pabrik</h4>
+                    <p class="text-sm text-gray-400 mb-4 flex items-start">
+                        <i class="fa-solid fa-map-location-dot mt-1 mr-3 text-findored"></i>
+                        <span>PT. New Trifindo Utama<br>Jl. Mandor Demong no. 9, Kel. Mustikasari, Kec. Bekasi Timur, Kota Bekasi, Jawa Barat.</span>
+                    </p>
+                    <p class="text-sm text-gray-400 flex items-center">
+                        <i class="fa-brands fa-whatsapp mr-3 text-findored text-lg"></i>
+                        <span>0813-1000-7326</span>
+                    </p>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 text-center md:text-left gap-4">
+                <p>&copy; 2026 PT. New Trifindo Utama (FINDO FIRE). All rights reserved.</p>
+                <div class="space-x-4">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6281310007326" target="_blank" class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-[#25D366] text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-2xl sm:text-3xl shadow-lg shadow-green-500/30 hover:bg-[#128C7E] hover:scale-110 transition-all duration-300 z-50 animate-bounce group">
+        <i class="fa-brands fa-whatsapp"></i>
+        <!-- Tooltip -->
+        <span class="absolute right-14 sm:right-16 bg-white text-gray-800 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none font-medium border border-gray-100 hidden sm:block">
+            Chat via WhatsApp
+        </span>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+                nav.classList.replace('bg-white/95', 'bg-white');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.replace('bg-white', 'bg-white/95');
+            }
+        });
+    </script>
+</body>
+</html>
