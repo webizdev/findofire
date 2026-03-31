@@ -235,6 +235,13 @@
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
                 <!-- Dynamically Rendered -->
             </div>
+
+            <!-- Load More / Less Button -->
+            <div id="gallery-toggle-container" class="mt-10 text-center hidden">
+                <button id="gallery-toggle-btn" class="px-6 py-2 border-2 border-findored text-findored rounded-full font-bold hover:bg-findored hover:text-white transition duration-300">
+                    Selengkapnya <i class="fa-solid fa-chevron-down ml-2"></i>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -792,25 +799,54 @@
                     filterEl.innerHTML += pillsHTML;
                 }
 
+                // Global variables for gallery state
+                let galleryMaximized = false;
+                let currentFilterId = 'all';
+
                 // Render gallery items
-                window.renderGalleryGrid = function(filterId = 'all') {
+                window.renderGalleryGrid = function(filterId = 'all', keepMaximized = false) {
                     const gridEl = document.getElementById('gallery-grid');
+                    const toggleContainer = document.getElementById('gallery-toggle-container');
+                    const toggleBtn = document.getElementById('gallery-toggle-btn');
+                    
                     if(!gridEl) return;
                     
-                    const filteredItems = filterId === 'all' ? galItems : galItems.filter(i => i.category_id === filterId);
+                    if (!keepMaximized) {
+                        currentFilterId = filterId;
+                        galleryMaximized = false;
+                    }
+                    
+                    const filteredItems = currentFilterId === 'all' ? galItems : galItems.filter(i => i.category_id === currentFilterId);
                     
                     if(!filteredItems.length) {
                         gridEl.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">Tidak ada gambar pada kategori ini.</p>';
+                        if(toggleContainer) toggleContainer.classList.add('hidden');
                         return;
+                    }
+
+                    const isDesktop = window.innerWidth >= 768; // md breakpoint
+                    const maxItems = isDesktop ? 3 : 2;
+                    let itemsToRender = filteredItems;
+
+                    if (filteredItems.length > maxItems) {
+                        if (toggleContainer) toggleContainer.classList.remove('hidden');
+                        if (!galleryMaximized) {
+                            itemsToRender = filteredItems.slice(0, maxItems);
+                            if(toggleBtn) toggleBtn.innerHTML = 'Selengkapnya <i class="fa-solid fa-chevron-down ml-2"></i>';
+                        } else {
+                            if(toggleBtn) toggleBtn.innerHTML = 'Lihat Sedikit <i class="fa-solid fa-chevron-up ml-2"></i>';
+                        }
+                    } else {
+                        if (toggleContainer) toggleContainer.classList.add('hidden');
                     }
 
                     // Prepare full gallery data for lightbox zooming
                     const galleryJsonForLightbox = filteredItems.map(i => ({url: i.image_url, title: i.title}));
                     const encodedFullGallery = encodeURIComponent(JSON.stringify(galleryJsonForLightbox));
-                    const catName = filterId === 'all' ? 'Portofolio' : (galCats.find(c=>c.id===filterId)?.name || 'Galeri');
+                    const catName = currentFilterId === 'all' ? 'Portofolio' : (galCats.find(c=>c.id===currentFilterId)?.name || 'Galeri');
                     const encodedCatName = encodeURIComponent(catName);
 
-                    gridEl.innerHTML = filteredItems.map((g, index) => {
+                    gridEl.innerHTML = itemsToRender.map((g, index) => {
                         const ytId = getYouTubeId(g.image_url);
                         const isAppVideo = isVideoType(g.image_url);
                         
@@ -837,6 +873,15 @@
 
                 // Initialize gallery with "all" 
                 renderGalleryGrid('all');
+
+                // Gallery Toggle Click Logic
+                const toggleBtn = document.getElementById('gallery-toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', () => {
+                        galleryMaximized = !galleryMaximized;
+                        renderGalleryGrid(currentFilterId, true);
+                    });
+                }
 
                 // Filter Click Logic
                 if(filterEl) {
