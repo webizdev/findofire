@@ -217,6 +217,27 @@
         </div>
     </section>
 
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+                <h4 id="galeri-subtitle" class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">PORTFOLIO</h4>
+                <h2 id="galeri-title" class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-4">Galeri Kendaraan & Peralatan</h2>
+                <p id="galeri-desc" class="text-gray-600 text-sm sm:text-base px-2">Lihat karya terbaik kami dalam perakitan kendaraan pemadam dan penyediaan alat keselamatan.</p>
+            </div>
+
+            <!-- Filter Pills -->
+            <div id="gallery-filters" class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-10">
+                <button class="px-4 py-2 rounded-full text-sm font-semibold transition bg-findored text-white shadow-md active-filter" data-filter="all">Semua Kategori</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Dynamically Rendered -->
+            </div>
+        </div>
+    </section>
+
     <!-- Sertifikat Perusahaan Section -->
     <section id="certificates" class="py-16 sm:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -468,7 +489,21 @@
         let currentImageIndex = 0;
         let currentGalleryTitle = '';
 
-        function openImageGallery(imagesJsonData, encodedTitle) {
+        // Helper function to extract YouTube ID
+        function getYouTubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Helper function to detect video types
+        function isVideoType(url) {
+            if (!url) return false;
+            return url.match(/\.(mp4|webm|ogg|mov)(\?|#|$)/i) || url.includes('/storage/v1/object/public/videos/');
+        }
+
+        function openImageGallery(imagesJsonData, encodedTitle, initialIndex = 0) {
             try {
                 const decodedJson = decodeURIComponent(imagesJsonData);
                 currentGallery = JSON.parse(decodedJson);
@@ -488,7 +523,7 @@
             
             try { currentGalleryTitle = decodeURIComponent(encodedTitle); } catch(e) { currentGalleryTitle = 'Katalog'; }
             
-            currentImageIndex = 0;
+            currentImageIndex = initialIndex || 0;
             document.getElementById('modal-title').textContent = currentGalleryTitle;
             
             updateModalUI();
@@ -506,13 +541,6 @@
             const nextBtn = document.getElementById('modal-next-btn');
             const counterEl = document.getElementById('modal-counter');
             
-            // Helper function to extract YouTube ID
-            function getYouTubeId(url) {
-                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-                const match = url.match(regExp);
-                return (match && match[2].length === 11) ? match[2] : null;
-            }
-
             // Fade out
             container.style.opacity = '0';
             
@@ -536,9 +564,9 @@
                     if (ytId) {
                         // Render YouTube
                         container.innerHTML = `<iframe class="w-[85vw] max-w-5xl aspect-video rounded shadow-xl relative z-0 pointer-events-auto" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                    } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                    } else if (isVideoType(url)) {
                         // Render HTML5 Video
-                        container.innerHTML = `<video controls autoplay class="max-w-full max-h-[85vh] w-auto h-auto object-contain relative z-0 pointer-events-auto"><source src="${url}" type="video/mp4"></video>`;
+                        container.innerHTML = `<video src="${url}" controls autoplay playsinline class="max-w-full max-h-[85vh] w-auto h-auto object-contain relative z-0 pointer-events-auto"></video>`;
                     } else {
                         // Render Standard Image
                         container.innerHTML = `<img src="${url}" class="max-w-full max-h-[85vh] w-auto h-auto object-contain relative z-0 pointer-events-auto">`;
@@ -656,14 +684,16 @@
         // INIT: LOAD ALL DATA
         // ============================================================
         async function initPage() {
-            const [settings, services, certs, clients, contactSvcs, footerSvcs, social] = await Promise.all([
+            const [settings, services, certs, clients, contactSvcs, footerSvcs, social, galCats, galItems] = await Promise.all([
                 api('findofire_settings?select=*'),
                 api('findofire_services?select=*&order=urutan.asc&aktif=eq.true'),
                 api('findofire_certificates?select=*&order=urutan.asc&aktif=eq.true'),
                 api('findofire_trust_clients?select=*&order=urutan.asc&aktif=eq.true'),
                 api('findofire_contact_services?select=*&order=urutan.asc&aktif=eq.true'),
                 api('findofire_footer_services?select=*&order=urutan.asc&aktif=eq.true'),
-                api('findofire_social_media?select=*&order=urutan.asc&aktif=eq.true')
+                api('findofire_social_media?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_gallery_categories?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_gallery_items?select=*&order=urutan.asc&aktif=eq.true')
             ]);
 
             // LOGO RENDERER HELPER
@@ -747,6 +777,83 @@
                         </div>
                     </div>`;
                 }).join('');
+            }
+
+            // GALLERY PORTOFOLIO
+            setEl('galeri-subtitle', getSetting(settings,'galeri_subtitle'));
+            setEl('galeri-title', getSetting(settings,'galeri_title'));
+            setEl('galeri-desc', getSetting(settings,'galeri_description'));
+            
+            if(galCats && galItems) {
+                // Render filter pills
+                const filterEl = document.getElementById('gallery-filters');
+                if(filterEl && galCats.length > 0) {
+                    const pillsHTML = galCats.map(c => `<button class="px-4 py-2 rounded-full text-sm font-semibold transition bg-gray-100 text-gray-600 hover:bg-gray-200" data-filter="${c.id}">${c.name}</button>`).join('');
+                    filterEl.innerHTML += pillsHTML;
+                }
+
+                // Render gallery items
+                window.renderGalleryGrid = function(filterId = 'all') {
+                    const gridEl = document.getElementById('gallery-grid');
+                    if(!gridEl) return;
+                    
+                    const filteredItems = filterId === 'all' ? galItems : galItems.filter(i => i.category_id === filterId);
+                    
+                    if(!filteredItems.length) {
+                        gridEl.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">Tidak ada gambar pada kategori ini.</p>';
+                        return;
+                    }
+
+                    // Prepare full gallery data for lightbox zooming
+                    const galleryJsonForLightbox = filteredItems.map(i => ({url: i.image_url, title: i.title}));
+                    const encodedFullGallery = encodeURIComponent(JSON.stringify(galleryJsonForLightbox));
+                    const catName = filterId === 'all' ? 'Portofolio' : (galCats.find(c=>c.id===filterId)?.name || 'Galeri');
+                    const encodedCatName = encodeURIComponent(catName);
+
+                    gridEl.innerHTML = filteredItems.map((g, index) => {
+                        const ytId = getYouTubeId(g.image_url);
+                        const isAppVideo = isVideoType(g.image_url);
+                        
+                        let thumbHtml = '';
+                        if (ytId) {
+                            thumbHtml = `<img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-300"></div><i class="fa-brands fa-youtube absolute text-5xl text-red-600 drop-shadow-md group-hover:scale-110 transition duration-300"></i>`;
+                        } else if (isAppVideo) {
+                            thumbHtml = `<video src="${g.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" autoplay muted loop playsinline preload="metadata"></video><div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-300"></div><i class="fa-solid fa-play absolute text-4xl text-white drop-shadow-md group-hover:scale-110 transition duration-300"></i>`;
+                        } else if (g.image_url) {
+                            thumbHtml = `<img src="${g.image_url}" alt="${g.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`;
+                        } else {
+                            thumbHtml = `<i class="fa-solid fa-image text-4xl text-gray-300"></i>`;
+                        }
+
+                        return `
+                        <div class="px-2 cursor-pointer hover:opacity-100 transition flex flex-col transform hover:-translate-y-1 group" onclick="openImageGallery('${encodedFullGallery}', '${encodedCatName}', ${index})">
+                            <div class="w-full bg-gray-100 rounded-lg overflow-hidden aspect-video relative flex items-center justify-center shadow-md">
+                                ${thumbHtml}
+                            </div>
+                            <div class="text-center mt-3 mb-4"><span class="text-findored italic text-sm sm:text-base tracking-wide" style="font-weight: 600;">${g.title || ''}</span></div>
+                        </div>`;
+                    }).join('');
+                };
+
+                // Initialize gallery with "all" 
+                renderGalleryGrid('all');
+
+                // Filter Click Logic
+                if(filterEl) {
+                    filterEl.addEventListener('click', (e) => {
+                        if(e.target.tagName === 'BUTTON') {
+                            Array.from(filterEl.children).forEach(btn => {
+                                btn.classList.remove('bg-findored', 'text-white', 'shadow-md', 'active-filter');
+                                btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+                            });
+                            e.target.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+                            e.target.classList.add('bg-findored', 'text-white', 'shadow-md', 'active-filter');
+                            
+                            const fid = e.target.getAttribute('data-filter');
+                            renderGalleryGrid(fid);
+                        }
+                    });
+                }
             }
 
             // LEGALITAS/CERTS

@@ -128,6 +128,9 @@
       <div class="nav-item" onclick="showSection('katalog')" data-section="katalog">
         <i class="fa-solid fa-box-open"></i><span>Katalog & Layanan</span>
       </div>
+      <div class="nav-item" onclick="showSection('galeri')" data-section="galeri">
+        <i class="fa-solid fa-images"></i><span>Galeri Portofolio</span>
+      </div>
       <div class="nav-item" onclick="showSection('legalitas')" data-section="legalitas">
         <i class="fa-solid fa-certificate"></i><span>Legalitas & Standar</span>
       </div>
@@ -406,6 +409,59 @@
             </button>
           </div>
           <div id="services-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== GALERI SECTION ===== -->
+      <div id="section-galeri" class="section-panel">
+        <p class="section-title">Galeri Portofolio</p>
+        <p class="section-sub">Atur kategori filter dan unggah foto galeri portofolio.</p>
+
+        <div class="card mb-6">
+          <p class="font-semibold text-gray-700 mb-4">Heading Section</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="form-label">Subtitle</label>
+              <input type="text" id="s-galeri_subtitle" class="form-input" placeholder="PILIHAN KAMI">
+            </div>
+            <div>
+              <label class="form-label">Judul</label>
+              <input type="text" id="s-galeri_title" class="form-input" placeholder="Galeri Kendaraan">
+            </div>
+            <div>
+              <label class="form-label">Deskripsi</label>
+              <input type="text" id="s-galeri_description" class="form-input">
+            </div>
+          </div>
+          <div class="mt-4">
+            <button onclick="saveSettings(['galeri_subtitle','galeri_title','galeri_description'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Heading
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Categories -->
+          <div class="card lg:col-span-1 border-t-4 border-findored">
+            <div class="flex items-center justify-between mb-4">
+              <p class="font-semibold text-gray-800">Kategori Filter</p>
+              <button onclick="openGalCategoryModal()" class="btn-primary py-1 px-3 text-xs">
+                <i class="fa-solid fa-plus"></i> Tambah
+              </button>
+            </div>
+            <div id="gal-categories-list" class="space-y-2"></div>
+          </div>
+
+          <!-- Items -->
+          <div class="card lg:col-span-2">
+            <div class="flex items-center justify-between mb-4">
+              <p class="font-semibold text-gray-800">Daftar Foto Galeri</p>
+              <button onclick="openGalItemModal()" class="btn-primary py-1 px-3 text-xs">
+                <i class="fa-solid fa-plus"></i> Tambah Foto
+              </button>
+            </div>
+            <div id="gal-items-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </div>
         </div>
       </div>
 
@@ -716,7 +772,15 @@ const api = (path, opts = {}) => fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
 }).then(r => r.json());
 
 const storageUpload = (folder, file, blob) => {
-  const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
+  let ext = 'jpg';
+  if (blob.type) {
+    if (blob.type.includes('webp')) ext = 'webp';
+    else if (blob.type.includes('png')) ext = 'png';
+    else if (blob.type.includes('mp4')) ext = 'mp4';
+    else if (blob.type.includes('webm')) ext = 'webm';
+    else if (blob.type.includes('ogg')) ext = 'ogg';
+    else if (blob.type.includes('quicktime')) ext = 'mov';
+  }
   const fname = `${folder}/${Date.now()}.${ext}`;
   return fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${fname}`, {
     method: 'POST',
@@ -1490,6 +1554,162 @@ async function deleteRow(table, id, reloadFn) {
 }
 
 // ============================================================
+// CRUD: GALLERY CATEGORIES
+// ============================================================
+let galCategoriesData = [];
+async function loadGalCategories() {
+  galCategoriesData = await api('findofire_gallery_categories?select=*&order=urutan.asc');
+  const el = document.getElementById('gal-categories-list');
+  if(!galCategoriesData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>';return;}
+  el.innerHTML = galCategoriesData.map(c=>`
+    <div class="flex items-center justify-between p-2 border border-gray-100 rounded bg-gray-50 hover:border-gray-200">
+      <div class="flex-1 overflow-hidden">
+        <p class="font-semibold text-sm text-gray-800 truncate">${c.name}</p>
+        <span class="text-[10px] text-gray-400">Ord: ${c.urutan} | ${c.aktif?'Aktif':'Nonaktif'}</span>
+      </div>
+      <div class="flex gap-1 ml-2">
+        <button class="w-6 h-6 rounded bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100" onclick="openGalCategoryModal('${c.id}')"><i class="fa-solid fa-pen text-[10px]"></i></button>
+        <button class="w-6 h-6 rounded bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100" onclick="deleteRow('findofire_gallery_categories','${c.id}',loadGalCategories)"><i class="fa-solid fa-trash text-[10px]"></i></button>
+      </div>
+    </div>`).join('');
+}
+function openGalCategoryModal(id) {
+  const c = id ? galCategoriesData.find(x=>x.id===id) : null;
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${c?'Edit':'Tambah'} Kategori</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Kategori</label><input id="m-gc-name" class="form-input" value="${c?.name||''}"></div>
+      <div><label class="form-label">Urutan</label><input id="m-gc-urutan" type="number" class="form-input" value="${c?.urutan||0}"></div>
+      <div class="flex items-center gap-3"><label class="toggle-switch"><input type="checkbox" id="m-gc-aktif" ${c?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveGalCategory('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+async function saveGalCategory(id) {
+  const payload={name:document.getElementById('m-gc-name').value,urutan:parseInt(document.getElementById('m-gc-urutan').value)||0,aktif:document.getElementById('m-gc-aktif').checked};
+  if(id)await api(`findofire_gallery_categories?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_gallery_categories',{method:'POST',body:JSON.stringify(payload)});
+  closeModal(); await loadGalCategories(); showToast('Kategori berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: GALLERY ITEMS
+// ============================================================
+let galItemsData = [];
+let galItemImgBlob = null;
+async function loadGalItems() {
+  galItemsData = await api('findofire_gallery_items?select=*,findofire_gallery_categories(name)&order=urutan.asc');
+  const el = document.getElementById('gal-items-list');
+  if(!galItemsData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6 col-span-2">Belum ada data foto.</p>';return;}
+  el.innerHTML = galItemsData.map(g => {
+    let thumbHtml = '';
+    const ytMatch = g.image_url ? g.image_url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/) : null;
+    const ytId = (ytMatch && ytMatch[2].length === 11) ? ytMatch[2] : null;
+
+    if (ytId) {
+      thumbHtml = `<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" class="w-full h-full object-cover opacity-80"><i class="fa-brands fa-youtube absolute text-3xl text-red-600 drop-shadow"></i>`;
+    } else if (g.image_url && (g.image_url.match(/\.(mp4|webm|ogg|mov)(\?|#|$)/i) || g.image_url.includes('/storage/v1/object/public/videos/'))) {
+      thumbHtml = `<video src="${g.image_url}" class="w-full h-full object-cover opacity-70" autoplay muted loop playsinline preload="metadata"></video><i class="fa-solid fa-play absolute text-2xl text-white drop-shadow"></i>`;
+    } else if (g.image_url) {
+      thumbHtml = `<img src="${g.image_url}" class="w-full h-full object-cover">`;
+    } else {
+      thumbHtml = `<i class="fa-solid fa-image text-3xl text-gray-300"></i>`;
+    }
+
+    return `
+    <div class="relative group rounded-lg overflow-hidden border border-gray-200 bg-white aspect-video flex flex-col">
+      <div class="relative flex-1 bg-gray-100 flex items-center justify-center overflow-hidden">
+        ${thumbHtml}
+        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2 text-center pointer-events-none">
+          <p class="text-white text-xs italic font-bold truncate tracking-wide" style="color:#E72322; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${g.title||''}</p>
+        </div>
+      </div>
+      <div class="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button class="w-8 h-8 rounded bg-white text-blue-600 shadow-md flex items-center justify-center hover:bg-blue-50" onclick="openGalItemModal('${g.id}')"><i class="fa-solid fa-pen text-xs"></i></button>
+        <button class="w-8 h-8 rounded bg-white text-red-600 shadow-md flex items-center justify-center hover:bg-red-50" onclick="deleteRow('findofire_gallery_items','${g.id}',loadGalItems)"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+      <div class="bg-gray-50 px-2 py-1 flex items-center justify-between text-[10px]">
+        <span class="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded truncate max-w-[100px]">${g.findofire_gallery_categories?.name||'Tanpa Kategori'}</span>
+        <span class="text-gray-400">Ord: ${g.urutan}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openGalItemModal(id) {
+  galItemImgBlob=null;
+  const g = id ? galItemsData.find(x=>x.id===id) : null;
+  const catOptions = galCategoriesData.map(c => `<option value="${c.id}" ${g?.category_id===c.id?'selected':''}>${c.name}</option>`).join('');
+  let initialPreview = '<i class="fa-solid fa-cloud-arrow-up text-gray-400 text-xl"></i><p class="text-sm text-gray-500 mt-1">Klik untuk upload media</p>';
+  if (g?.image_url) {
+    const ytMatch = g.image_url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+    const ytId = (ytMatch && ytMatch[2].length === 11) ? ytMatch[2] : null;
+    if (ytId) {
+      initialPreview = `<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" class="h-32 object-contain mx-auto">`;
+    } else if (g.image_url.match(/\.(mp4|webm|ogg|mov)(\?|#|$)/i) || g.image_url.includes('/storage/v1/object/public/videos/')) {
+      initialPreview = `<video src="${g.image_url}" class="h-32 object-contain mx-auto" autoplay muted loop playsinline preload="metadata"></video>`;
+    } else {
+      initialPreview = `<img src="${g.image_url}" class="h-32 object-contain mx-auto">`;
+    }
+  }
+
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${g?'Edit':'Tambah'} Foto Galeri</h3>
+    <div class="space-y-4">
+      <div>
+        <label class="form-label">Upload Gambar / Video</label>
+        <div class="upload-area mb-2" onclick="document.getElementById('m-gi-img-file').click()">
+          ${initialPreview}
+          <img id="m-gi-img-preview" class="h-32 object-contain hidden mt-2 mx-auto">
+        </div>
+        <input type="file" id="m-gi-img-file" accept="image/*,video/*" class="hidden" onchange="handleGalItemImgSelect(event)">
+        <input type="text" id="m-gi-img-url" class="form-input mt-2" value="${g?.image_url||''}" placeholder="Atau paste URL media">
+      </div>
+      <div><label class="form-label">Kategori</label><select id="m-gi-category" class="form-input"><option value="">-- Pilih Kategori --</option>${catOptions}</select></div>
+      <div><label class="form-label">Teks Judul Merah (Italic)</label><input id="m-gi-title" class="form-input font-bold italic text-red-600 placeholder:normal-case placeholder:font-normal placeholder:text-gray-400" value="${g?.title||''}" placeholder="Contoh: Fire Truck - JA 10000 L"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="form-label">Urutan</label><input id="m-gi-urutan" type="number" class="form-input" value="${g?.urutan||0}"></div>
+        <div class="flex items-center gap-2 pt-6"><label class="toggle-switch"><input type="checkbox" id="m-gi-aktif" ${g?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveGalItem('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+function handleGalItemImgSelect(e) { 
+  const f=e.target.files[0]; 
+  if(!f)return; 
+  if(f.type.startsWith('video/')) {
+    galItemImgBlob=f; 
+    document.getElementById('m-gi-img-url').value = f.name + ' (akan diupload)'; 
+  } else {
+    compressImage(f,1048576,(blob,url)=>{ 
+      galItemImgBlob=blob; 
+      document.getElementById('m-gi-img-preview').src=url; 
+      document.getElementById('m-gi-img-preview').classList.remove('hidden');
+    }); 
+  }
+}
+async function saveGalItem(id) {
+  const catVal = document.getElementById('m-gi-category').value;
+  if(!catVal){ showToast('Kategori wajib dipilih','error'); return; }
+  let imgUrl = document.getElementById('m-gi-img-url').value;
+  if(galItemImgBlob){ 
+    const isVid = galItemImgBlob.type && galItemImgBlob.type.startsWith('video/');
+    const folder = isVid ? 'videos' : 'gallery';
+    const u=await uploadToSupabase(galItemImgBlob,folder); 
+    if(u)imgUrl=u; 
+  }
+  if(!imgUrl || imgUrl.includes('(akan diupload)')) { showToast('Media wajib diisi','error'); return; }
+
+  const payload = { 
+    category_id: catVal, 
+    title: document.getElementById('m-gi-title').value, 
+    image_url: imgUrl, 
+    urutan: parseInt(document.getElementById('m-gi-urutan').value)||0, 
+    aktif: document.getElementById('m-gi-aktif').checked 
+  };
+
+  if(id) await api(`findofire_gallery_items?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_gallery_items',{method:'POST',body:JSON.stringify(payload)});
+  closeModal(); await loadGalItems(); showToast('Galeri berhasil disimpan!');
+}
+
+// ============================================================
 // INIT DASHBOARD
 // ============================================================
 async function initDashboard() {
@@ -1502,7 +1722,9 @@ async function initDashboard() {
     loadContactServices(),
     loadFooterServices(),
     loadSocial(),
-    loadOptin()
+    loadOptin(),
+    loadGalCategories(),
+    loadGalItems()
   ]);
 }
 </script>
