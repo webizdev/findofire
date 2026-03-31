@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDO FIRE - PT. New Trifindo Utama | Manufaktur Mobil Damkar & Proteksi Kebakaran</title>
+    <meta name="description" content="PT. New Trifindo Utama (FINDO FIRE) adalah spesialis manufaktur mobil pemadam kebakaran, perakitan baru & rekondisi, serta instalasi Fire Protection System di Bekasi, Jawa Barat.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        findored: {
+                            DEFAULT: '#D32F2F', // Fire Red
+                            dark: '#B71C1C',
+                            light: '#EF5350'
+                        },
+                        findodark: {
+                            DEFAULT: '#1E1E1E', // Industrial Dark
+                            light: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Hero Overlay */
+        .hero-overlay {
+            background: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.5));
+        }
+        /* Hide scrollbar for clean look in galleries */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+            display: flex;
+            width: max-content;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased bg-gray-50">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img id="header-logo" src="assets/logo.jpg" alt="FINDO FIRE Logo" class="h-10 sm:h-12 w-auto object-contain rounded-md shadow-sm">
+                    <span id="header-logo-text" class="hidden font-heading font-bold text-xl text-findored">FINDO FIRE</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="font-medium text-gray-600 hover:text-findored transition">Beranda</a>
+                    <a href="#about" class="font-medium text-gray-600 hover:text-findored transition">Tentang Kami</a>
+                    <a href="#services" class="font-medium text-gray-600 hover:text-findored transition">Produk & Layanan</a>
+                    <a href="#contact" class="font-medium text-gray-600 hover:text-findored transition">Kontak</a>
+                    <a id="inaproc-link-desktop" href="#" class="font-medium text-gray-600 hover:text-findored transition">INAPROC</a>
+                    <a href="#contact" class="bg-findored hover:bg-findored-dark text-white px-5 py-2.5 rounded-md font-medium transition shadow-lg shadow-red-500/30">Hubungi Kami</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-findored focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="#home" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Beranda</a>
+                <a href="#about" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Tentang Kami</a>
+                <a href="#services" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Produk & Layanan</a>
+                <a href="#contact" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">Kontak</a>
+                <a id="inaproc-link-mobile" href="#" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-findored hover:bg-gray-50">INAPROC</a>
+                <a href="#contact" class="block mt-4 text-center bg-findored text-white px-3 py-3 rounded-md text-base font-medium shadow-md">Hubungi Kami</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-24 pb-20 md:pt-32 md:pb-48 overflow-hidden min-h-screen flex items-center">
+        <!-- Background Image Mobil Pemadam Kebakaran -->
+        <div class="absolute inset-0 z-0">
+            <img id="hero-bg" src="assets/hero.jpg" alt="Mobil Pemadam Kebakaran FINDO FIRE" class="w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center lg:text-left flex flex-col lg:flex-row items-center w-full mt-10 lg:mt-0">
+            <div class="w-full lg:w-2/3">
+                <span id="hero-badge" class="inline-block py-1 px-3 rounded-full bg-findored/20 border border-findored/50 text-red-400 font-semibold text-xs sm:text-sm mb-6 tracking-wide uppercase">
+                    Pakar Proteksi Kebakaran Industri
+                </span>
+                <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
+                    Solusi Terpadu <br class="hidden lg:block"/>
+                    <span class="text-findored">Kendaraan Pemadam</span> <br class="block sm:hidden"/> & Sistem Proteksi.
+                </h1>
+                <p id="hero-subtitle" class="text-base sm:text-lg lg:text-xl text-white drop-shadow-md mb-10 max-w-2xl mx-auto lg:mx-0 font-medium px-2 sm:px-0">
+                    PT. New Trifindo Utama hadir melindungi aset berharga Anda. Kami memproduksi mobil pemadam berkualitas, rekondisi, serta instalasi Fire Protection System berstandar tinggi.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a id="hero-btn-primary" href="#contact" class="bg-findored hover:bg-findored-dark text-white px-6 sm:px-8 py-4 rounded-md font-semibold transition text-base sm:text-lg shadow-lg shadow-red-500/40 flex items-center justify-center gap-2">
+                        Dapatkan Penawaran <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a id="hero-btn-secondary" href="#services" class="bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-sm text-white px-6 sm:px-8 py-4 rounded-md font-semibold transition text-base sm:text-lg flex items-center justify-center">
+                        Lihat Katalog Produk
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quick Stats/Trust Badge on Desktop -->
+            <div class="hidden lg:flex w-full lg:w-1/3 justify-end mt-12 lg:mt-0">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl w-full max-w-sm text-center">
+                    <i id="hero-trust-icon" class="fa-solid fa-shield-halved text-5xl text-findored mb-4"></i>
+                    <h3 id="hero-trust-title" class="text-2xl font-heading font-bold text-white mb-2">Keamanan & Kualitas</h3>
+                    <p id="hero-trust-desc" class="text-gray-300 mb-6">Dipercaya oleh instansi pemerintah dan perusahaan swasta di seluruh Indonesia.</p>
+                    <div class="grid grid-cols-2 gap-4 border-t border-white/20 pt-6">
+                        <div>
+                            <p id="hero-stat1-val" class="text-3xl font-bold text-white">50+</p>
+                            <p id="hero-stat1-lbl" class="text-xs text-gray-400 uppercase tracking-wider">Unit Terkirim</p>
+                        </div>
+                        <div>
+                            <p id="hero-stat2-val" class="text-3xl font-bold text-white">100%</p>
+                            <p id="hero-stat2-lbl" class="text-xs text-gray-400 uppercase tracking-wider">Standar Safety</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-20 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                <div class="w-full lg:w-1/2 relative order-2 lg:order-1">
+                    <div class="absolute inset-0 bg-findored rounded-2xl transform translate-x-4 translate-y-4 opacity-20 hidden sm:block"></div>
+                    <img id="about-img" src="assets/tentang.jpg" alt="Workshop PT New Trifindo Utama" class="relative rounded-2xl shadow-xl w-full object-cover h-[300px] sm:h-[400px]">
+                    <div class="absolute -bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white p-3 sm:p-4 rounded-xl shadow-lg flex items-center gap-3 sm:gap-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-findored text-white rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <div>
+                            <p id="about-workshop-label" class="text-xs sm:text-sm text-gray-500 font-semibold">Workshop Resmi</p>
+                            <p id="about-workshop-location" class="font-bold text-findodark text-sm sm:text-base">Bekasi Timur</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 order-1 lg:order-2">
+                    <h4 id="about-subtitle" class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Tentang Perusahaan</h4>
+                    <h2 id="about-title" class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-6">Mitra Terpercaya Untuk Perlindungan Kebakaran Yang Optimal</h2>
+                    <p id="about-desc1" class="text-gray-600 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
+                        <strong>PT. NEW TRIFINDO UTAMA</strong> dengan brand <strong>FINDO FIRE</strong> adalah perusahaan manufaktur dan penyedia jasa yang berfokus pada bidang Fire Fighting, Fire Protection System & Fire Equipment.
+                    </p>
+                    <p id="about-desc2" class="text-gray-600 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
+                        Berlokasi di Mustika Jaya, Bekasi Timur, workshop kami dilengkapi dengan tenaga ahli berpengalaman.
+                    </p>
+                    <ul id="about-features" class="space-y-3 sm:space-y-4">
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-findored mt-1"></i><span class="text-gray-700 text-sm sm:text-base"><strong>Pabrikasi Mandiri:</strong> Kualitas material plat dan tangki terjamin.</span></li>
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-findored mt-1"></i><span class="text-gray-700 text-sm sm:text-base"><strong>Teknisi Tersertifikasi:</strong> Pengerjaan mekanikal & elektrikal presisi.</span></li>
+                        <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-findored mt-1"></i><span class="text-gray-700 text-sm sm:text-base"><strong>Layanan Purna Jual:</strong> Garansi fungsi pompa dan service berkala.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services & Products Section -->
+    <section id="services" class="py-16 sm:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                <h4 id="katalog-subtitle" class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Katalog & Layanan</h4>
+                <h2 id="katalog-title" class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-4">Produk & Solusi Proteksi Kebakaran</h2>
+                <p id="katalog-desc" class="text-gray-600 text-sm sm:text-base px-2">Kami menyediakan layanan hulu ke hilir untuk kebutuhan pemadaman api, mulai dari armada kendaraan hingga peralatan safety perorangan.</p>
+            </div>
+
+            <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Dynamically rendered from Supabase -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div class="h-56 sm:h-64 overflow-hidden relative"><img src="assets/Fire Truck Manufacture.jpg" alt="Fire Truck" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><div class="absolute bottom-4 left-4"><i class="fa-solid fa-truck-fast text-2xl text-findored-light"></i></div></div>
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col"><h3 class="text-xl font-heading font-bold text-findodark mb-3">Fire Truck Manufacture</h3><p class="text-gray-600 mb-4 line-clamp-3 text-sm flex-1">Spesialisasi perakitan mobil pemadam kebakaran baru dari berbagai sasis.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sertifikat Perusahaan Section -->
+    <section id="certificates" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+                <h4 id="legalitas-subtitle" class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Legalitas & Standar</h4>
+                <h2 id="legalitas-title" class="text-3xl sm:text-4xl font-heading font-bold text-findodark mb-4">Sertifikat Perusahaan</h2>
+                <p id="legalitas-desc" class="text-gray-600 text-sm sm:text-base px-2">Komitmen kami terhadap kualitas dan keselamatan operasional dibuktikan melalui sertifikasi nasional dan internasional.</p>
+            </div>
+
+            <div id="certs-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 justify-items-center">
+                <!-- Dynamically rendered from Supabase -->
+            </div>
+            </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section class="py-12 sm:py-16 bg-findodark relative overflow-hidden text-center md:text-left">
+        <!-- Abstract Pattern Background -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#D32F2F 1px, transparent 1px); background-size: 20px 20px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="mb-4 md:mb-0">
+                <h2 id="cta-title" class="text-2xl sm:text-3xl font-heading font-bold text-white mb-2">Butuh Unit Mobil Damkar Kustom?</h2>
+                <p id="cta-desc" class="text-gray-400 text-sm sm:text-lg">Konsultasikan spesifikasi teknis dan anggaran proyek Anda bersama tim ahli kami.</p>
+            </div>
+            <div class="w-full md:w-auto">
+                <a id="cta-btn" href="https://wa.me/6281310007326" target="_blank" class="w-full sm:w-auto justify-center bg-white text-findodark hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 rounded-md font-bold transition text-base sm:text-lg shadow-lg flex items-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-green-500 text-2xl"></i> Hubungi via WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Location Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 id="contact-subtitle" class="text-findored font-bold tracking-wider uppercase mb-2 text-sm sm:text-base">Hubungi Kami</h4>
+                    <h2 id="contact-title" class="text-3xl font-heading font-bold text-findodark mb-6 sm:mb-8">Kunjungi Workshop Kami atau Kirimkan Pesan</h2>
+                    
+                    <div class="space-y-4 sm:space-y-6 mb-8">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Workshop & Kantor Pusat</h4>
+                                <p id="contact-address" class="text-gray-600 leading-relaxed text-sm sm:text-base">
+                                    Jl. Mandor Demong no. 9, Kel. Mustikasari,<br>
+                                    Mustika Jaya, Kec. Bekasi Timur,<br>
+                                    Kota Bekasi, Jawa Barat.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-brands fa-whatsapp text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Telepon & WhatsApp</h4>
+                                <p class="text-gray-600 text-sm sm:text-base">
+                                    <a id="contact-wa-link" href="https://wa.me/6281310007326" target="_blank" class="hover:text-findored transition"><span id="contact-wa-text">0813-1000-7326</span></a>
+                                </p>
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">Layanan Konsultasi 24/7 (Darurat & Proyek)</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-findored flex-shrink-0">
+                                <i class="fa-solid fa-envelope text-lg sm:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1 text-sm sm:text-base">Email Inquiry</h4>
+                                <p class="text-gray-600 text-sm sm:text-base">
+                                    <a id="contact-email-link" href="mailto:info@findofire.com" class="hover:text-findored transition"><span id="contact-email-text">info@findofire.com</span></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Functional Optin Form -->
+                    <form id="optin-form" class="space-y-4 bg-gray-50 p-5 sm:p-6 rounded-xl border border-gray-100" onsubmit="submitOptinForm(event)">
+                        <h4 id="contact-form-title" class="font-bold text-gray-900 mb-2 sm:mb-4 text-sm sm:text-base">Minta Penawaran Harga (Quotation)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input id="optin-nama" type="text" placeholder="Nama / Instansi" required class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base">
+                            <input id="optin-telepon" type="text" placeholder="Nomor Telepon" required class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base">
+                        </div>
+                        <select id="optin-layanan" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-gray-600 text-sm sm:text-base">
+                            <option value="">-- Pilih Layanan yang Dibutuhkan --</option>
+                        </select>
+                        <textarea id="optin-pesan" rows="3" placeholder="Pesan atau Detail Spesifikasi..." class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-findored/50 focus:border-findored bg-white text-sm sm:text-base"></textarea>
+                        <button type="submit" class="w-full bg-findodark hover:bg-black text-white px-4 py-3 rounded-md font-semibold transition text-sm sm:text-base flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-green-400 text-lg"></i> Kirim & Chat WhatsApp
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Google Maps Embed -->
+                <div class="h-[300px] sm:h-full min-h-[300px] sm:min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 order-first lg:order-last mb-6 lg:mb-0">
+                    <!-- Menggunakan keyword pencarian "PT. New Trifindo Utama Bekasi" untuk iframe -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.9220972412586!2d107.0216659!3d-6.2739462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698e3b33075c75%3A0xc3f6e1df7f73db50!2sJl.%20Mandor%20Demong%20No.9%2C%20RT.004%2FRW.003%2C%20Mustikasari%2C%20Kec.%20Mustika%20Jaya%2C%20Kota%20Bks%2C%20Jawa%20Barat%2017157!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar Section -->
+    <section class="py-4 bg-gray-100 border-t border-b border-gray-200 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 text-center">
+             <h4 id="trustbar-heading" class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-widest">Dipercaya Oleh Berbagai Instansi & Perusahaan Nasional</h4>
+        </div>
+        <div class="relative w-full overflow-hidden flex items-center bg-gray-100">
+            <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
+            <div id="trustbar-marquee" class="animate-marquee whitespace-nowrap py-1 flex gap-6 sm:gap-12 items-center">
+                <!-- Dynamically rendered from Supabase -->
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">KEMENTERIAN PERHUBUNGAN</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PERTAMINA (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">ANGKASA PURA II</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PLN (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">PT. PERTAMINA (PERSERO)</span>
+                <span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60">ANGKASA PURA II</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-findodark text-gray-300 pt-16 pb-8 border-t-4 border-findored">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 mb-10 sm:mb-12">
+                <!-- Brand Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img id="footer-logo" src="assets/logo.jpg" alt="FINDO FIRE Logo" class="h-8 md:h-10 w-auto object-contain rounded shadow-sm">
+                        <span id="footer-logo-text" class="hidden font-heading font-bold text-xl text-findored">FINDO FIRE</span>
+                    </div>
+                    <p id="footer-desc" class="text-sm text-gray-400 mb-6">Mitra terpercaya manufaktur kendaraan pemadam kebakaran dan sistem proteksi untuk perlindungan maksimal aset Anda.</p>
+                    <div id="footer-social" class="flex space-x-4">
+                        <!-- Dynamic social media icons -->
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Tautan Cepat</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#home" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Beranda</a></li>
+                        <li><a href="#about" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Tentang Perusahaan</a></li>
+                        <li><a href="#services" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Katalog Produk</a></li>
+                        <li><a href="#contact" class="hover:text-findored transition"><i class="fa-solid fa-chevron-right text-xs mr-2 text-findored"></i> Kontak</a></li>
+                    </ul>
+                </div>
+                <!-- Services Footer -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Layanan Utama</h4>
+                    <ul id="footer-services-list" class="space-y-3 text-sm">
+                        <!-- Dynamic footer services -->
+                        <li><a href="#" class="text-gray-400 hover:text-findored transition"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i> Perakitan Mobil Damkar</a></li>
+                    </ul>
+                </div>
+                <!-- Office -->
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6">Workshop / Pabrik</h4>
+                    <p class="text-sm text-gray-400 mb-4 flex items-start">
+                        <i class="fa-solid fa-map-location-dot mt-1 mr-3 text-findored"></i>
+                        <span id="footer-address">PT. New Trifindo Utama<br>Jl. Mandor Demong no. 9, Kel. Mustikasari, Kec. Bekasi Timur, Kota Bekasi, Jawa Barat.</span>
+                    </p>
+                    <p class="text-sm text-gray-400 flex items-center">
+                        <i class="fa-brands fa-whatsapp mr-3 text-findored text-lg"></i>
+                        <span id="footer-wa">0813-1000-7326</span>
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 text-center md:text-left gap-4">
+                <p id="footer-copyright">&copy; 2026 PT. New Trifindo Utama (FINDO FIRE). All rights reserved.</p>
+                <div class="space-x-4">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6281310007326" target="_blank" class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-[#25D366] text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-2xl sm:text-3xl shadow-lg shadow-green-500/30 hover:bg-[#128C7E] hover:scale-110 transition-all duration-300 z-50 animate-bounce group">
+        <i class="fa-brands fa-whatsapp"></i>
+        <!-- Tooltip -->
+        <span class="absolute right-14 sm:right-16 bg-white text-gray-800 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none font-medium border border-gray-100 hidden sm:block">
+            Chat via WhatsApp
+        </span>
+    </a>
+
+    <!-- Catalog Image Modal (Gallery) -->
+    <div id="catalog-image-modal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-md flex items-center justify-center transition-opacity duration-300 opacity-0">
+        <button onclick="closeImageModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-gray-400 hover:text-white text-4xl focus:outline-none transition-colors z-20 w-12 h-12 flex items-center justify-center bg-black/40 hover:bg-findored rounded-full shadow-lg">
+            &times;
+        </button>
+
+        <!-- Image Counter -->
+        <div id="modal-counter" class="absolute top-6 left-6 text-white text-sm sm:text-base font-medium bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm z-20 hidden border border-white/10 shadow-md tracking-wider">
+            1 / 1
+        </div>
+
+        <div class="relative w-full max-w-6xl px-4 flex justify-center items-center h-full" onclick="event.stopPropagation()">
+            <!-- Prev Button -->
+            <button id="modal-prev-btn" onclick="prevImage(event)" class="absolute left-2 sm:left-4 lg:-left-6 z-20 text-white hover:text-findored text-2xl sm:text-4xl bg-black/50 hover:bg-black/80 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-full transition-all hidden border border-white/10 shadow-xl">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- The flex container bounds the image -->
+            <div class="relative max-h-[85vh] flex justify-center items-center rounded-xl overflow-hidden shadow-2xl border border-white/10 ring-1 ring-white/5 mx-auto max-w-full bg-findodark">
+                <!-- If no image, show placeholder -->
+                <div id="modal-img-container" class="w-full h-full flex items-center justify-center min-w-[300px] min-h-[300px] md:min-w-[500px] transition-opacity duration-150">
+                    <i id="modal-placeholder-icon" class="fa-solid fa-image text-6xl text-gray-700"></i>
+                </div>
+                <!-- Title Overlay (Absolute positioned relative to the image container) -->
+                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-20 pb-8 px-6 sm:px-10 text-center z-10 pointer-events-none">
+                    <h3 id="modal-title" class="text-xl sm:text-3xl font-heading font-bold text-white drop-shadow-md tracking-wide"></h3>
+                    <p id="modal-caption" class="text-sm sm:text-base text-gray-200 mt-2 tracking-wide drop-shadow transition-opacity duration-300"></p>
+                </div>
+            </div>
+
+            <!-- Next Button -->
+            <button id="modal-next-btn" onclick="nextImage(event)" class="absolute right-2 sm:right-4 lg:-right-6 z-20 text-white hover:text-findored text-2xl sm:text-4xl bg-black/50 hover:bg-black/80 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-full transition-all hidden border border-white/10 shadow-xl">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Gallery Modal Logic
+        const imageModal = document.getElementById('catalog-image-modal');
+        let currentGallery = [];
+        let currentImageIndex = 0;
+        let currentGalleryTitle = '';
+
+        function openImageGallery(imagesJsonData, encodedTitle) {
+            try {
+                const decodedJson = decodeURIComponent(imagesJsonData);
+                currentGallery = JSON.parse(decodedJson);
+            } catch (e) {
+                currentGallery = [];
+            }
+            
+            // Clean & Map arrays to handle both string URLs and Object {url, title} formats
+            if(Array.isArray(currentGallery)) {
+                currentGallery = currentGallery.map(item => {
+                    if (typeof item === 'string') return { url: item, title: '' };
+                    return item;
+                }).filter(item => item && item.url && typeof item.url === 'string' && item.url.trim().length > 0);
+            } else {
+                currentGallery = [];
+            }
+            
+            try { currentGalleryTitle = decodeURIComponent(encodedTitle); } catch(e) { currentGalleryTitle = 'Katalog'; }
+            
+            currentImageIndex = 0;
+            document.getElementById('modal-title').textContent = currentGalleryTitle;
+            
+            updateModalUI();
+
+            imageModal.classList.remove('hidden');
+            void imageModal.offsetWidth;
+            imageModal.classList.remove('opacity-0');
+            imageModal.classList.add('opacity-100');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function updateModalUI() {
+            const container = document.getElementById('modal-img-container');
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+            const counterEl = document.getElementById('modal-counter');
+            
+            // Helper function to extract YouTube ID
+            function getYouTubeId(url) {
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? match[2] : null;
+            }
+
+            // Fade out
+            container.style.opacity = '0';
+            
+            setTimeout(() => {
+                const item = currentGallery && currentGallery.length > 0 ? currentGallery[currentImageIndex] : null;
+                const url = item ? item.url : '';
+                const title = item ? item.title : '';
+                container.innerHTML = ''; // Clear previous media
+                
+                const capEl = document.getElementById('modal-caption');
+                if (title) {
+                    capEl.textContent = title;
+                    capEl.classList.remove('hidden');
+                } else {
+                    capEl.textContent = '';
+                    capEl.classList.add('hidden');
+                }
+                
+                if (url) {
+                    const ytId = getYouTubeId(url);
+                    if (ytId) {
+                        // Render YouTube
+                        container.innerHTML = `<iframe class="w-[85vw] max-w-5xl aspect-video rounded shadow-xl relative z-0 pointer-events-auto" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+                        // Render HTML5 Video
+                        container.innerHTML = `<video controls autoplay class="max-w-full max-h-[85vh] w-auto h-auto object-contain relative z-0 pointer-events-auto"><source src="${url}" type="video/mp4"></video>`;
+                    } else {
+                        // Render Standard Image
+                        container.innerHTML = `<img src="${url}" class="max-w-full max-h-[85vh] w-auto h-auto object-contain relative z-0 pointer-events-auto">`;
+                    }
+                } else {
+                    container.innerHTML = `<i class="fa-solid fa-image text-6xl text-gray-700"></i>`;
+                }
+
+                // Fade back in
+                container.style.opacity = '1';
+                
+                // Handle Navigation
+                if (currentGallery && currentGallery.length > 1) {
+                    prevBtn.classList.remove('hidden');
+                    nextBtn.classList.remove('hidden');
+                    counterEl.classList.remove('hidden');
+                    counterEl.textContent = `${currentImageIndex + 1} / ${currentGallery.length}`;
+                } else {
+                    prevBtn.classList.add('hidden');
+                    nextBtn.classList.add('hidden');
+                    counterEl.classList.add('hidden');
+                }
+            }, 150);
+        }
+        
+        function nextImage(e) {
+            if(e) e.stopPropagation();
+            if (currentGallery.length <= 1) return;
+            currentImageIndex = (currentImageIndex + 1) % currentGallery.length;
+            updateModalUI();
+        }
+        
+        function prevImage(e) {
+            if(e) e.stopPropagation();
+            if (currentGallery.length <= 1) return;
+            currentImageIndex = (currentImageIndex - 1 + currentGallery.length) % currentGallery.length;
+            updateModalUI();
+        }
+
+        function closeImageModal() {
+            imageModal.classList.remove('opacity-100');
+            imageModal.classList.add('opacity-0');
+            setTimeout(() => {
+                imageModal.classList.add('hidden');
+                document.body.style.overflow = '';
+                currentGallery = [];
+                document.getElementById('modal-img-container').innerHTML = ''; // Stop video
+            }, 300);
+        }
+        
+        // Modal Overlay Click & Keyboard Events
+        imageModal.addEventListener('click', (e) => {
+            if(e.target === imageModal || e.target.closest('#modal-img-container')) closeImageModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if(!imageModal.classList.contains('hidden')) {
+                if(e.key === 'ArrowRight') nextImage();
+                if(e.key === 'ArrowLeft') prevImage();
+                if(e.key === 'Escape') closeImageModal();
+            }
+        });
+
+        // ============================================================
+        // SUPABASE CONFIG
+        // ============================================================
+        const SB_URL = 'https://pgltsyrtduvddpcdlchk.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnbHRzeXJ0ZHV2ZGRwY2RsY2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MTQ1MjcsImV4cCI6MjA4ODM5MDUyN30.dLVNHeff4wpR3XFg_KwG43x5XEaT0CC2XN4ljxt00C4';
+
+        async function api(path) {
+            try {
+                const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' }
+                });
+                return r.ok ? await r.json() : [];
+            } catch { return []; }
+        }
+        function getSetting(settings, key, def='') { const s = settings.find(x=>x.key===key); return s?.value||def; }
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) { nav.classList.add('shadow-md'); nav.classList.replace('bg-white/95','bg-white'); }
+            else { nav.classList.remove('shadow-md'); nav.classList.replace('bg-white','bg-white/95'); }
+        });
+
+        // ============================================================
+        // FORM SUBMIT (Optin → Supabase + WhatsApp redirect)
+        // ============================================================
+        async function submitOptinForm(e) {
+            e.preventDefault();
+            const nama = document.getElementById('optin-nama').value.trim();
+            const telepon = document.getElementById('optin-telepon').value.trim();
+            const layanan = document.getElementById('optin-layanan').value;
+            const pesan = document.getElementById('optin-pesan').value.trim();
+            const waNum = document.getElementById('cta-btn')?.href?.match(/wa\.me\/(\d+)/)?.[1] || '6281310007326';
+            // Save to DB
+            await fetch(`${SB_URL}/rest/v1/findofire_optin`, {
+                method: 'POST',
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+                body: JSON.stringify({ nama, telepon, layanan, pesan })
+            });
+            // Redirect to WhatsApp
+            const msg = encodeURIComponent(`Halo, saya ${nama}. Nomor: ${telepon}. Layanan: ${layanan||'-'}. ${pesan}`);
+            window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
+        }
+
+        // ============================================================
+        // INIT: LOAD ALL DATA
+        // ============================================================
+        async function initPage() {
+            const [settings, services, certs, clients, contactSvcs, footerSvcs, social] = await Promise.all([
+                api('findofire_settings?select=*'),
+                api('findofire_services?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_certificates?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_trust_clients?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_contact_services?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_footer_services?select=*&order=urutan.asc&aktif=eq.true'),
+                api('findofire_social_media?select=*&order=urutan.asc&aktif=eq.true')
+            ]);
+
+            // LOGO RENDERER HELPER
+            const renderLogo = (url, text, imgId, txtId) => {
+                const img = document.getElementById(imgId);
+                const txt = document.getElementById(txtId);
+                if (url) { img.src = url; img.classList.remove('hidden'); txt.classList.add('hidden'); }
+                else if (text) { img.classList.add('hidden'); txt.textContent = text; txt.classList.remove('hidden'); }
+                else { img.classList.remove('hidden'); txt.classList.add('hidden'); } // Fallback to default in HTML
+            };
+
+            // HEADER LOGO
+            renderLogo(getSetting(settings,'header_logo_url'), getSetting(settings,'header_logo_text'), 'header-logo', 'header-logo-text');
+
+            // INAPROC LINK
+            const inaprocLink = getSetting(settings,'inaproc_link','#');
+            document.getElementById('inaproc-link-desktop').href = inaprocLink;
+            document.getElementById('inaproc-link-mobile').href = inaprocLink;
+
+            // HERO
+            const setEl = (id,val) => { if(document.getElementById(id)&&val) document.getElementById(id).textContent=val; };
+            const heroBg = getSetting(settings,'hero_bg_image');
+            if(heroBg) document.getElementById('hero-bg').src=heroBg;
+            setEl('hero-badge', getSetting(settings,'hero_badge_text'));
+            const heroTitleVal = getSetting(settings,'hero_title');
+            if(heroTitleVal) document.getElementById('hero-title').innerHTML=heroTitleVal;
+            setEl('hero-subtitle', getSetting(settings,'hero_subtitle'));
+            setEl('hero-trust-title', getSetting(settings,'hero_trust_title'));
+            setEl('hero-trust-desc', getSetting(settings,'hero_trust_desc'));
+            setEl('hero-stat1-val', getSetting(settings,'hero_stat1_val'));
+            setEl('hero-stat1-lbl', getSetting(settings,'hero_stat1_lbl'));
+            setEl('hero-stat2-val', getSetting(settings,'hero_stat2_val'));
+            setEl('hero-stat2-lbl', getSetting(settings,'hero_stat2_lbl'));
+
+            // ABOUT
+            const aboutImg = getSetting(settings,'about_image');
+            if(aboutImg) document.getElementById('about-img').src=aboutImg;
+            setEl('about-subtitle', getSetting(settings,'about_subtitle'));
+            setEl('about-title', getSetting(settings,'about_title'));
+            setEl('about-desc1', getSetting(settings,'about_desc1'));
+            setEl('about-desc2', getSetting(settings,'about_desc2'));
+            setEl('about-workshop-label', getSetting(settings,'about_workshop_label'));
+            setEl('about-workshop-location', getSetting(settings,'about_workshop_location'));
+
+            // KATALOG/SERVICES
+            setEl('katalog-subtitle', getSetting(settings,'katalog_subtitle'));
+            setEl('katalog-title', getSetting(settings,'katalog_title'));
+            setEl('katalog-desc', getSetting(settings,'katalog_desc'));
+            if(services.length) {
+                document.getElementById('services-grid').innerHTML = services.map(s => {
+                    // Extract gallery images or fallback to single image
+                    let galleryUrls = [];
+                    if (Array.isArray(s.gallery_images)) {
+                        galleryUrls = s.gallery_images;
+                    } else if (typeof s.gallery_images === 'string') {
+                        try { galleryUrls = JSON.parse(s.gallery_images); } catch(e){}
+                    }
+                    if (!Array.isArray(galleryUrls)) galleryUrls = [];
+                    
+                    if (galleryUrls.length === 0 && s.image_url) {
+                        galleryUrls = [s.image_url];
+                    }
+                    
+                    const safeGallery = encodeURIComponent(JSON.stringify(galleryUrls));
+                    const safeTitle = encodeURIComponent(s.title);
+
+                    return `
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 transform hover:-translate-y-1 flex flex-col">
+                        <div class="h-56 sm:h-64 overflow-hidden relative">
+                            ${s.image_url ? `<img src="${s.image_url}" alt="${s.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">` : `<div class="w-full h-full bg-gray-200 flex items-center justify-center"><i class="${s.icon} text-6xl text-findored"></i></div>`}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4"><i class="${s.icon} text-2xl text-findored-light"></i></div>
+                        </div>
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col">
+                            <h3 class="text-xl font-heading font-bold text-findodark mb-3">${s.title}</h3>
+                            <p class="text-gray-600 mb-4 line-clamp-3 text-sm flex-1">${s.description}</p>
+                            ${(s.sub_items||[]).length ? `<ul class="text-sm text-gray-500 space-y-2 border-t pt-4 mb-4">${(s.sub_items||[]).map(si=>`<li><i class="fa-solid fa-angle-right text-findored mr-2"></i>${si.text}</li>`).join('')}</ul>`:''}
+                            <button onclick="openImageGallery('${safeGallery}', '${safeTitle}')" class="mt-auto w-full bg-findored/5 hover:bg-findored text-findored hover:text-white border border-findored/20 hover:border-findored py-2.5 rounded-md font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-md">
+                                <i class="fa-regular fa-image text-lg"></i> Lihat Gambar
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // LEGALITAS/CERTS
+            setEl('legalitas-subtitle', getSetting(settings,'legalitas_subtitle'));
+            setEl('legalitas-title', getSetting(settings,'legalitas_title'));
+            setEl('legalitas-desc', getSetting(settings,'legalitas_desc'));
+            if(certs.length) {
+                document.getElementById('certs-grid').innerHTML = certs.map(c => `
+                    <div class="bg-gray-50 border border-gray-100 rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300 w-full">
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-gray-200">
+                            ${c.image_url ? `<img src="${c.image_url}" class="w-14 h-14 object-contain">` : `<i class="${c.icon} text-3xl ${c.icon_color}"></i>`}
+                        </div>
+                        <h3 class="font-bold text-findodark mb-1">${c.title}</h3>
+                        <p class="text-xs text-gray-500">${c.description}</p>
+                    </div>`).join('');
+            }
+
+            // CTA
+            setEl('cta-title', getSetting(settings,'cta_title'));
+            setEl('cta-desc', getSetting(settings,'cta_desc'));
+            const ctaWa = getSetting(settings,'contact_whatsapp');
+            if(ctaWa) { const b=document.getElementById('cta-btn'); if(b) b.href=`https://wa.me/${ctaWa.replace(/\D/g,'')}`; }
+
+            // CONTACT
+            setEl('contact-subtitle', getSetting(settings,'contact_subtitle'));
+            setEl('contact-title', getSetting(settings,'contact_title'));
+            setEl('contact-address', getSetting(settings,'contact_address'));
+            const cWa = getSetting(settings,'contact_whatsapp');
+            if(cWa) { const waNum = cWa.replace(/\D/g,''); const waLink = document.getElementById('contact-wa-link'); if(waLink) waLink.href=`https://wa.me/${waNum}`; }
+            setEl('contact-wa-text', cWa);
+            const cEmail = getSetting(settings,'contact_email');
+            if(cEmail) { const eLink = document.getElementById('contact-email-link'); if(eLink) eLink.href=`mailto:${cEmail}`; setEl('contact-email-text', cEmail); }
+            const mapsUrl = getSetting(settings,'contact_maps_url');
+            if(mapsUrl) { const mapFrame = document.querySelector('#contact iframe'); if(mapFrame) mapFrame.src = mapsUrl; }
+            setEl('contact-form-title', getSetting(settings,'contact_form_title'));
+            const contactSvcsEl = document.getElementById('optin-layanan');
+            contactSvcs.forEach(cs => { const o=document.createElement('option'); o.value=cs.value; o.textContent=cs.label; contactSvcsEl.appendChild(o); });
+
+            // TRUST BAR
+            setEl('trustbar-heading', getSetting(settings,'trustbar_heading'));
+            if(clients.length) {
+                const isCont = getSetting(settings,'trust_bar_continuous','true') === 'true';
+                const speed = getSetting(settings,'trust_bar_speed','30');
+                const items = clients.map(c=>`<span class="text-base sm:text-xl font-bold font-heading text-gray-400 opacity-60 ml-12 sm:ml-20 whitespace-nowrap">${c.name}</span>`).join('');
+                const el = document.getElementById('trustbar-marquee');
+                el.innerHTML = isCont ? items + items : items;
+                el.style.animationIterationCount = isCont ? 'infinite' : '1';
+                el.style.animationDuration = `${speed}s`;
+            }
+
+            // FOOTER LOGO
+            const fLogoUrl = getSetting(settings,'footer_logo_url');
+            const fLogoText = getSetting(settings,'footer_logo_text');
+            renderLogo(fLogoUrl, fLogoText, 'footer-logo', 'footer-logo-text');
+            
+            setEl('footer-desc', getSetting(settings,'footer_description'));
+            setEl('footer-address', getSetting(settings,'footer_workshop_address'));
+            setEl('footer-wa', getSetting(settings,'footer_workshop_phone'));
+            setEl('footer-copyright', getSetting(settings,'footer_copyright'));
+
+            // FOOTER SERVICES (WA CTA)
+            if(footerSvcs.length) {
+                const waFooter = getSetting(settings,'contact_whatsapp','6281310007326').replace(/\D/g,'');
+                document.getElementById('footer-services-list').innerHTML = footerSvcs.map(s => {
+                    const msg = encodeURIComponent(`Saya mau konsultasi tentang ${s.label}`);
+                    return `<li><a href="https://wa.me/${waFooter}?text=${msg}" target="_blank" class="text-gray-400 hover:text-findored transition"><i class="fa-solid fa-check text-xs mr-2 text-findored"></i>${s.label}</a></li>`;
+                }).join('');
+            }
+
+            // FOOTER SOCIAL MEDIA
+            if(social.length) {
+                document.getElementById('footer-social').innerHTML = social.map(s=>`
+                    <a href="${s.url}" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-findored transition text-white">
+                        <i class="${s.icon}"></i>
+                    </a>`).join('');
+            }
+        }
+
+        initPage();
+    </script>
+</body>
+</html>

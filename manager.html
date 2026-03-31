@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — FINDO FIRE</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{findored:{DEFAULT:'#D32F2F',dark:'#B71C1C',light:'#EF5350'},findodark:{DEFAULT:'#1E1E1E',light:'#333333'}},fontFamily:{sans:['Inter','sans-serif'],heading:['Montserrat','sans-serif']}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --sidebar-w: 260px; }
+  body { font-family: 'Inter', sans-serif; }
+  #sidebar { width: var(--sidebar-w); transition: transform 0.3s; }
+  #main-content { margin-left: var(--sidebar-w); }
+  @media(max-width:1024px){#sidebar{position:fixed;z-index:40;transform:translateX(-100%);height:100vh;}#sidebar.open{transform:translateX(0);}#main-content{margin-left:0;}}
+  .nav-item { display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:.875rem;font-weight:500;color:#9ca3af; }
+  .nav-item:hover { background:#1f2937;color:#fff; }
+  .nav-item.active { background:#D32F2F;color:#fff; }
+  .nav-item i { width:18px;text-align:center; }
+  .section-panel { display:none; }
+  .section-panel.active { display:block; }
+  .card { background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:24px; }
+  .form-label { display:block;font-size:.8125rem;font-weight:600;color:#374151;margin-bottom:6px; }
+  .form-input { width:100%;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:.875rem;outline:none;transition:border-color .2s;background:#fff; }
+  .form-input:focus { border-color:#D32F2F; }
+  textarea.form-input { resize:vertical;min-height:80px; }
+  .btn-primary { background:#D32F2F;color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.875rem;border:none;cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:6px; }
+  .btn-primary:hover { background:#B71C1C; }
+  .btn-secondary { background:#f3f4f6;color:#374151;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.875rem;border:1.5px solid #e5e7eb;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px; }
+  .btn-secondary:hover { background:#e5e7eb; }
+  .btn-danger { background:#fee2e2;color:#b91c1c;padding:6px 12px;border-radius:6px;font-weight:600;font-size:.8125rem;border:none;cursor:pointer;transition:all .2s; }
+  .btn-danger:hover { background:#fecaca; }
+  .btn-edit { background:#eff6ff;color:#1d4ed8;padding:6px 12px;border-radius:6px;font-weight:600;font-size:.8125rem;border:none;cursor:pointer;transition:all .2s; }
+  .btn-edit:hover { background:#dbeafe; }
+  .upload-area { border:2px dashed #e5e7eb;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa; }
+  .upload-area:hover { border-color:#D32F2F;background:#fff5f5; }
+  .upload-area.dragging { border-color:#D32F2F;background:#fff5f5; }
+  .img-preview { max-width:100%;max-height:160px;border-radius:8px;object-fit:contain;border:1px solid #e5e7eb; }
+  .toggle-switch { position:relative;width:44px;height:24px;flex-shrink:0; }
+  .toggle-switch input { opacity:0;width:0;height:0; }
+  .toggle-slider { position:absolute;inset:0;background:#d1d5db;border-radius:99px;cursor:pointer;transition:.3s; }
+  .toggle-slider:before { content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s; }
+  .toggle-switch input:checked + .toggle-slider { background:#D32F2F; }
+  .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
+  .table-row { display:grid;gap:12px;align-items:center;padding:12px 16px;border-radius:8px;background:#f9fafb;margin-bottom:8px; }
+  .badge { padding:2px 10px;border-radius:99px;font-size:.75rem;font-weight:600; }
+  .badge-green { background:#dcfce7;color:#166534; }
+  .badge-red { background:#fee2e2;color:#991b1b; }
+  #toast { position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;gap:8px; }
+  .toast-msg { padding:12px 20px;border-radius:10px;font-size:.875rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);animation:slideIn .3s ease;min-width:220px; }
+  .toast-msg.success { background:#166534;color:#fff; }
+  .toast-msg.error { background:#991b1b;color:#fff; }
+  @keyframes slideIn { from{transform:translateX(60px);opacity:0;}to{transform:translateX(0);opacity:1;} }
+  .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px; }
+  .modal-box { background:#fff;border-radius:16px;padding:28px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto; }
+  .section-title { font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:4px;font-family:'Montserrat',sans-serif; }
+  .section-sub { font-size:.875rem;color:#6b7280;margin-bottom:20px; }
+  .divider { border:none;border-top:1.5px solid #f3f4f6;margin:24px 0; }
+  input[type=file] { display:none; }
+  .sub-item-row { display:flex;gap:8px;align-items:center;margin-bottom:6px; }
+  .sub-item-row input { flex:1; }
+</style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="fixed inset-0 bg-findodark z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-findored rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-fire text-white text-2xl"></i>
+      </div>
+      <h1 class="text-xl font-heading font-bold text-findodark">FINDO FIRE Admin</h1>
+      <p class="text-sm text-gray-500 mt-1">Masukkan password untuk melanjutkan</p>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="form-label">Password</label>
+        <input type="password" id="login-pw" class="form-input" placeholder="Masukkan password..." onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div id="login-err" class="text-sm text-red-600 hidden">Password salah. Silakan coba lagi.</div>
+      <button onclick="doLogin()" class="btn-primary w-full justify-center">
+        <i class="fa-solid fa-lock-open"></i> Masuk
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODAL CONTAINER -->
+<div id="modal-overlay" class="modal-overlay hidden" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+<!-- APP LAYOUT -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed top-0 left-0 h-screen bg-findodark flex flex-col z-40 overflow-y-auto">
+    <div class="p-5 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-findored rounded-lg flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-fire text-white text-sm"></i>
+        </div>
+        <div>
+          <p class="text-white font-bold text-sm font-heading">FINDO FIRE</p>
+          <p class="text-gray-400 text-xs">Admin Dashboard</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 p-3 space-y-1">
+      <div class="nav-item active" onclick="showSection('header')" data-section="header">
+        <i class="fa-solid fa-image"></i><span>Header & Logo</span>
+      </div>
+      <div class="nav-item" onclick="showSection('hero')" data-section="hero">
+        <i class="fa-solid fa-bullseye"></i><span>Hero Section</span>
+      </div>
+      <div class="nav-item" onclick="showSection('about')" data-section="about">
+        <i class="fa-solid fa-circle-info"></i><span>Tentang Kami</span>
+      </div>
+      <div class="nav-item" onclick="showSection('katalog')" data-section="katalog">
+        <i class="fa-solid fa-box-open"></i><span>Katalog & Layanan</span>
+      </div>
+      <div class="nav-item" onclick="showSection('legalitas')" data-section="legalitas">
+        <i class="fa-solid fa-certificate"></i><span>Legalitas & Standar</span>
+      </div>
+      <div class="nav-item" onclick="showSection('cta')" data-section="cta">
+        <i class="fa-solid fa-bullhorn"></i><span>CTA Section</span>
+      </div>
+      <div class="nav-item" onclick="showSection('kontak')" data-section="kontak">
+        <i class="fa-solid fa-phone"></i><span>Kontak</span>
+      </div>
+      <div class="nav-item" onclick="showSection('trustbar')" data-section="trustbar">
+        <i class="fa-solid fa-building"></i><span>Trust Bar</span>
+      </div>
+      <div class="nav-item" onclick="showSection('footer')" data-section="footer">
+        <i class="fa-solid fa-link"></i><span>Footer</span>
+      </div>
+      <div class="nav-item" onclick="showSection('optin')" data-section="optin">
+        <i class="fa-solid fa-table-list"></i><span>Data Optin</span>
+      </div>
+      <hr class="border-white/10 my-2">
+      <div class="nav-item" onclick="showSection('password')" data-section="password">
+        <i class="fa-solid fa-lock"></i><span>Ubah Password</span>
+      </div>
+    </nav>
+
+    <div class="p-3 border-t border-white/10">
+      <button onclick="doLogout()" class="nav-item w-full text-left hover:bg-red-900">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Keluar</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div id="main-content" class="min-h-screen">
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-20 px-4 sm:px-6 py-3 flex items-center gap-4">
+      <button class="lg:hidden text-gray-600 hover:text-findored" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars text-xl"></i>
+      </button>
+      <div id="topbar-title" class="font-heading font-bold text-gray-800">Header & Logo</div>
+      <div class="ml-auto text-xs text-gray-400" id="last-saved"></div>
+    </header>
+
+    <div class="p-4 sm:p-6 lg:p-8">
+
+      <!-- ===== HEADER SECTION ===== -->
+      <div id="section-header" class="section-panel active">
+        <p class="section-title">Header & Logo</p>
+        <p class="section-sub">Upload logo header dan atur link menu INAPROC.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card">
+            <label class="form-label">Logo Header</label>
+            <div class="upload-area" onclick="triggerUpload('header-logo-file')" ondragover="handleDragOver(event)" ondrop="handleDrop(event,'header-logo-file')">
+              <div id="header-logo-preview-wrap">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
+                <p class="text-sm text-gray-500">Klik atau drag & drop gambar</p>
+                <p class="text-xs text-gray-400 mt-1">JPG, PNG, WebP — maks. 1 MB setelah kompresi</p>
+              </div>
+              <img id="header-logo-preview" class="img-preview hidden mt-3 mx-auto">
+            </div>
+            <input type="file" id="header-logo-file" accept="image/*" onchange="handleImageSelect(event,'header-logo-preview',updateHeaderLogoUrl)">
+            <div class="mt-3">
+              <label class="form-label">URL Logo Saat Ini</label>
+              <input type="text" id="s-header_logo_url" class="form-input" placeholder="Akan terisi otomatis setelah upload">
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Jika kosong, akan tampil teks fallback di bawah.</p>
+          </div>
+          <div class="card space-y-4">
+            <div>
+              <label class="form-label">Text Fallback Logo Header</label>
+              <input type="text" id="s-header_logo_text" class="form-input" placeholder="e.g. FINDO FIRE">
+            </div>
+            <div>
+              <label class="form-label">Link Menu INAPROC</label>
+              <input type="text" id="s-inaproc_link" class="form-input" placeholder="https://inaproc.id/...">
+              <p class="text-xs text-gray-400 mt-1">URL tujuan ketika menu INAPROC di navbar diklik.</p>
+            </div>
+            <button onclick="saveSettings(['header_logo_url','header_logo_text','inaproc_link'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== HERO SECTION ===== -->
+      <div id="section-hero" class="section-panel">
+        <p class="section-title">Hero Section</p>
+        <p class="section-sub">Atur teks, gambar latar, dan badge kepercayaan di hero.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card space-y-4">
+            <div>
+              <label class="form-label">Badge Text</label>
+              <input type="text" id="s-hero_badge_text" class="form-input" placeholder="Pakar Proteksi Kebakaran Industri">
+            </div>
+            <div>
+              <label class="form-label">Judul Hero (HTML diperbolehkan)</label>
+              <textarea id="s-hero_title" class="form-input"></textarea>
+            </div>
+            <div>
+              <label class="form-label">Deskripsi Hero</label>
+              <textarea id="s-hero_subtitle" class="form-input"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="form-label">Teks Tombol Primer</label>
+                <input type="text" id="s-hero_btn_primary_text" class="form-input">
+              </div>
+              <div>
+                <label class="form-label">Link Tombol Primer</label>
+                <input type="text" id="s-hero_btn_primary_link" class="form-input" placeholder="#contact">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="form-label">Teks Tombol Sekunder</label>
+                <input type="text" id="s-hero_btn_secondary_text" class="form-input">
+              </div>
+              <div>
+                <label class="form-label">Link Tombol Sekunder</label>
+                <input type="text" id="s-hero_btn_secondary_link" class="form-input" placeholder="#services">
+              </div>
+            </div>
+            <button onclick="saveSettings(['hero_badge_text','hero_title','hero_subtitle','hero_btn_primary_text','hero_btn_primary_link','hero_btn_secondary_text','hero_btn_secondary_link'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Teks Hero
+            </button>
+          </div>
+          <div class="space-y-6">
+            <div class="card space-y-4">
+              <p class="font-semibold text-gray-700">Gambar Background Hero</p>
+              <div class="upload-area" onclick="triggerUpload('hero-bg-file')" ondragover="handleDragOver(event)" ondrop="handleDrop(event,'hero-bg-file')">
+                <div id="hero-bg-preview-wrap">
+                  <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-1"></i>
+                  <p class="text-sm text-gray-500">Klik atau drag & drop</p>
+                </div>
+                <img id="hero-bg-preview" class="img-preview hidden mt-2 mx-auto">
+              </div>
+              <input type="file" id="hero-bg-file" accept="image/*" onchange="handleImageSelect(event,'hero-bg-preview',updateHeroBgUrl)">
+              <input type="text" id="s-hero_bg_image" class="form-input" placeholder="URL gambar background">
+              <button onclick="saveSettings(['hero_bg_image'])" class="btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Gambar
+              </button>
+            </div>
+            <div class="card space-y-3">
+              <p class="font-semibold text-gray-700">Trust Badge (Desktop)</p>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="form-label">Icon (FA class)</label>
+                  <input type="text" id="s-hero_trust_icon" class="form-input" placeholder="fa-solid fa-shield-halved">
+                </div>
+                <div>
+                  <label class="form-label">Judul Badge</label>
+                  <input type="text" id="s-hero_trust_title" class="form-input">
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Deskripsi Badge</label>
+                <textarea id="s-hero_trust_description" class="form-input" rows="2"></textarea>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="form-label">Stat 1 Nilai</label><input type="text" id="s-hero_trust_stat1_value" class="form-input" placeholder="50+">
+                </div>
+                <div>
+                  <label class="form-label">Stat 1 Label</label><input type="text" id="s-hero_trust_stat1_label" class="form-input" placeholder="Unit Terkirim">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="form-label">Stat 2 Nilai</label><input type="text" id="s-hero_trust_stat2_value" class="form-input" placeholder="100%">
+                </div>
+                <div>
+                  <label class="form-label">Stat 2 Label</label><input type="text" id="s-hero_trust_stat2_label" class="form-input" placeholder="Standar Safety">
+                </div>
+              </div>
+              <button onclick="saveSettings(['hero_trust_icon','hero_trust_title','hero_trust_description','hero_trust_stat1_value','hero_trust_stat1_label','hero_trust_stat2_value','hero_trust_stat2_label'])" class="btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Trust Badge
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ABOUT SECTION ===== -->
+      <div id="section-about" class="section-panel">
+        <p class="section-title">Tentang Kami</p>
+        <p class="section-sub">Atur teks, gambar, dan daftar keunggulan perusahaan.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="card space-y-4">
+            <div>
+              <label class="form-label">Subtitle Section</label>
+              <input type="text" id="s-about_subtitle" class="form-input" placeholder="Tentang Perusahaan">
+            </div>
+            <div>
+              <label class="form-label">Judul Section</label>
+              <input type="text" id="s-about_title" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Paragraf 1 (HTML diperbolehkan)</label>
+              <textarea id="s-about_description_1" class="form-input" rows="3"></textarea>
+            </div>
+            <div>
+              <label class="form-label">Paragraf 2</label>
+              <textarea id="s-about_description_2" class="form-input" rows="3"></textarea>
+            </div>
+            <button onclick="saveSettings(['about_subtitle','about_title','about_description_1','about_description_2'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Teks
+            </button>
+          </div>
+          <div class="card space-y-4">
+            <p class="font-semibold text-gray-700">Gambar Tentang</p>
+            <div class="upload-area" onclick="triggerUpload('about-img-file')" ondragover="handleDragOver(event)" ondrop="handleDrop(event,'about-img-file')">
+              <div id="about-img-preview-wrap">
+                <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-1"></i>
+                <p class="text-sm text-gray-500">Klik atau drag & drop</p>
+              </div>
+              <img id="about-img-preview" class="img-preview hidden mt-2 mx-auto">
+            </div>
+            <input type="file" id="about-img-file" accept="image/*" onchange="handleImageSelect(event,'about-img-preview',updateAboutImgUrl)">
+            <input type="text" id="s-about_image" class="form-input" placeholder="URL gambar tentang">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="form-label">Label Workshop</label>
+                <input type="text" id="s-about_workshop_label" class="form-input" placeholder="Workshop Resmi">
+              </div>
+              <div>
+                <label class="form-label">Lokasi Workshop</label>
+                <input type="text" id="s-about_workshop_location" class="form-input" placeholder="Bekasi Timur">
+              </div>
+            </div>
+            <button onclick="saveSettings(['about_image','about_workshop_label','about_workshop_location'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Gambar & Workshop
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <p class="font-semibold text-gray-800">Daftar Fitur Keunggulan</p>
+            <button onclick="openFeatureModal()" class="btn-primary text-sm py-2">
+              <i class="fa-solid fa-plus"></i> Tambah
+            </button>
+          </div>
+          <div id="features-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== KATALOG & LAYANAN ===== -->
+      <div id="section-katalog" class="section-panel">
+        <p class="section-title">Katalog & Layanan</p>
+        <p class="section-sub">Atur heading section dan kelola card layanan/produk.</p>
+        <div class="card mb-6">
+          <p class="font-semibold text-gray-700 mb-4">Heading Section</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="form-label">Subtitle</label>
+              <input type="text" id="s-katalog_subtitle" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Judul</label>
+              <input type="text" id="s-katalog_title" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Deskripsi</label>
+              <input type="text" id="s-katalog_description" class="form-input">
+            </div>
+          </div>
+          <div class="mt-4">
+            <button onclick="saveSettings(['katalog_subtitle','katalog_title','katalog_description'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Heading
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <p class="font-semibold text-gray-800">Daftar Layanan / Produk</p>
+            <button onclick="openServiceModal()" class="btn-primary text-sm py-2">
+              <i class="fa-solid fa-plus"></i> Tambah Layanan
+            </button>
+          </div>
+          <div id="services-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== LEGALITAS & STANDAR ===== -->
+      <div id="section-legalitas" class="section-panel">
+        <p class="section-title">Legalitas & Standar</p>
+        <p class="section-sub">Atur heading dan kelola daftar sertifikat perusahaan.</p>
+        <div class="card mb-6">
+          <p class="font-semibold text-gray-700 mb-4">Heading Section</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="form-label">Subtitle</label>
+              <input type="text" id="s-legalitas_subtitle" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Judul</label>
+              <input type="text" id="s-legalitas_title" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Deskripsi</label>
+              <input type="text" id="s-legalitas_description" class="form-input">
+            </div>
+          </div>
+          <div class="mt-4">
+            <button onclick="saveSettings(['legalitas_subtitle','legalitas_title','legalitas_description'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Heading
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <p class="font-semibold text-gray-800">Daftar Sertifikat</p>
+            <button onclick="openCertModal()" class="btn-primary text-sm py-2">
+              <i class="fa-solid fa-plus"></i> Tambah Sertifikat
+            </button>
+          </div>
+          <div id="certs-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== CTA SECTION ===== -->
+      <div id="section-cta" class="section-panel">
+        <p class="section-title">CTA Section</p>
+        <p class="section-sub">Atur teks dan tombol Call to Action.</p>
+        <div class="card max-w-2xl space-y-4">
+          <div>
+            <label class="form-label">Judul CTA</label>
+            <input type="text" id="s-cta_title" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">Deskripsi CTA</label>
+            <textarea id="s-cta_description" class="form-input"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Teks Tombol</label>
+              <input type="text" id="s-cta_button_text" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Link Tombol (WhatsApp URL)</label>
+              <input type="text" id="s-cta_button_link" class="form-input" placeholder="https://wa.me/62...">
+            </div>
+          </div>
+          <button onclick="saveSettings(['cta_title','cta_description','cta_button_text','cta_button_link'])" class="btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan CTA
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== KONTAK ===== -->
+      <div id="section-kontak" class="section-panel">
+        <p class="section-title">Kontak</p>
+        <p class="section-sub">Atur info kontak, maps, dan opsi dropdown form penawaran.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="card space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="form-label">Subtitle Section</label>
+                <input type="text" id="s-contact_subtitle" class="form-input">
+              </div>
+              <div>
+                <label class="form-label">Judul Section</label>
+                <input type="text" id="s-contact_title" class="form-input">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Alamat Lengkap (HTML diperbolehkan)</label>
+              <textarea id="s-contact_address" class="form-input"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="form-label">Nomor WhatsApp (format: 628...)</label>
+                <input type="text" id="s-contact_whatsapp" class="form-input" placeholder="6281310007326">
+              </div>
+              <div>
+                <label class="form-label">Tampilan Nomor WA</label>
+                <input type="text" id="s-contact_whatsapp_display" class="form-input" placeholder="0813-1000-7326">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Catatan WhatsApp</label>
+              <input type="text" id="s-contact_whatsapp_note" class="form-input" placeholder="Layanan Konsultasi 24/7">
+            </div>
+            <div>
+              <label class="form-label">Email</label>
+              <input type="email" id="s-contact_email" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Nomor WA Tombol Floating</label>
+              <input type="text" id="s-floating_wa_number" class="form-input" placeholder="6281310007326">
+            </div>
+            <button onclick="saveSettings(['contact_subtitle','contact_title','contact_address','contact_whatsapp','contact_whatsapp_display','contact_whatsapp_note','contact_email','floating_wa_number'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Info Kontak
+            </button>
+          </div>
+          <div class="card space-y-4">
+            <div>
+              <label class="form-label">Judul Form Penawaran</label>
+              <input type="text" id="s-contact_form_title" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">URL Embed Google Maps</label>
+              <textarea id="s-contact_maps_embed" class="form-input" rows="3" placeholder="https://www.google.com/maps/embed?pb=..."></textarea>
+            </div>
+            <button onclick="saveSettings(['contact_form_title','contact_maps_embed'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Maps & Form
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <p class="font-semibold text-gray-800">Opsi Dropdown Form Layanan</p>
+            <button onclick="openContactServiceModal()" class="btn-primary text-sm py-2">
+              <i class="fa-solid fa-plus"></i> Tambah Opsi
+            </button>
+          </div>
+          <div id="contact-services-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== TRUST BAR ===== -->
+      <div id="section-trustbar" class="section-panel">
+        <p class="section-title">Trust Bar</p>
+        <p class="section-sub">Atur heading dan daftar klien/instansi di marquee.</p>
+        <div class="card mb-6 max-w-2xl">
+          <label class="form-label">Heading Text Trust Bar</label>
+          <input type="text" id="s-trust_bar_text" class="form-input mb-4" placeholder="Trusted by leading companies">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center gap-3">
+              <label class="toggle-switch"><input type="checkbox" id="s-trust_bar_continuous" checked><span class="toggle-slider"></span></label>
+              <span class="text-sm font-medium text-gray-700">Continuous Slider (Infinite)</span>
+            </div>
+            <div>
+              <label class="form-label">Slider Speed (detik)</label>
+              <input type="number" id="s-trust_bar_speed" class="form-input" placeholder="20" value="20">
+              <p class="text-xs text-gray-400 mt-1">Semakin kecil semakin cepat.</p>
+            </div>
+          </div>
+          <button onclick="saveSettings(['trust_bar_text','trust_bar_continuous','trust_bar_speed'])" class="btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan
+          </button>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <p class="font-semibold text-gray-800">Daftar Klien / Instansi</p>
+            <button onclick="openClientModal()" class="btn-primary text-sm py-2">
+              <i class="fa-solid fa-plus"></i> Tambah Klien
+            </button>
+          </div>
+          <div id="clients-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <div id="section-footer" class="section-panel">
+        <p class="section-title">Footer</p>
+        <p class="section-sub">Atur logo footer, info perusahaan, layanan, dan media sosial.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="card space-y-4">
+            <p class="font-semibold text-gray-700">Logo Footer</p>
+            <div class="upload-area" onclick="triggerUpload('footer-logo-file')" ondragover="handleDragOver(event)" ondrop="handleDrop(event,'footer-logo-file')">
+              <div id="footer-logo-preview-wrap">
+                <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-1"></i>
+                <p class="text-sm text-gray-500">Klik atau drag & drop (beda dari header)</p>
+              </div>
+              <img id="footer-logo-preview" class="img-preview hidden mt-2 mx-auto">
+            </div>
+            <input type="file" id="footer-logo-file" accept="image/*" onchange="handleImageSelect(event,'footer-logo-preview',updateFooterLogoUrl)">
+            <input type="text" id="s-footer_logo_url" class="form-input" placeholder="URL logo footer">
+            <div>
+              <label class="form-label">Text Fallback Logo Footer</label>
+              <input type="text" id="s-footer_logo_text" class="form-input" placeholder="FINDO FIRE">
+            </div>
+            <button onclick="saveSettings(['footer_logo_url','footer_logo_text'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Logo
+            </button>
+          </div>
+          <div class="card space-y-4">
+            <div>
+              <label class="form-label">Deskripsi Footer</label>
+              <textarea id="s-footer_description" class="form-input"></textarea>
+            </div>
+            <div>
+              <label class="form-label">Label Workshop Footer</label>
+              <input type="text" id="s-footer_workshop_label" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Alamat Workshop Footer</label>
+              <textarea id="s-footer_workshop_address" class="form-input"></textarea>
+            </div>
+            <div>
+              <label class="form-label">Nomor Telepon Footer</label>
+              <input type="text" id="s-footer_workshop_phone" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Text Copyright</label>
+              <input type="text" id="s-footer_copyright" class="form-input">
+            </div>
+            <button onclick="saveSettings(['footer_description','footer_workshop_label','footer_workshop_address','footer_workshop_phone','footer_copyright'])" class="btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Info Footer
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card">
+            <div class="flex items-center justify-between mb-4">
+              <p class="font-semibold text-gray-800">Layanan Utama Footer</p>
+              <button onclick="openFooterServiceModal()" class="btn-primary text-sm py-2">
+                <i class="fa-solid fa-plus"></i> Tambah
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 mb-3">Klik layanan di website akan membuka WA: "Saya mau konsultasi tentang [layanan]"</p>
+            <div id="footer-services-list"></div>
+          </div>
+          <div class="card">
+            <div class="flex items-center justify-between mb-4">
+              <p class="font-semibold text-gray-800">Media Sosial</p>
+              <button onclick="openSocialModal()" class="btn-primary text-sm py-2">
+                <i class="fa-solid fa-plus"></i> Tambah
+              </button>
+            </div>
+            <div id="social-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DATA OPTIN ===== -->
+      <div id="section-optin" class="section-panel">
+        <p class="section-title">Data Optin (Lead)</p>
+        <p class="section-sub">Data pengunjung yang mengirim form penawaran harga. Read-only.</p>
+        <div class="card overflow-x-auto">
+          <table class="w-full text-sm min-w-[600px]">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="text-left py-3 px-3 font-semibold text-gray-600">Tanggal</th>
+                <th class="text-left py-3 px-3 font-semibold text-gray-600">Nama/Instansi</th>
+                <th class="text-left py-3 px-3 font-semibold text-gray-600">Telepon</th>
+                <th class="text-left py-3 px-3 font-semibold text-gray-600">Layanan</th>
+                <th class="text-left py-3 px-3 font-semibold text-gray-600">Pesan</th>
+              </tr>
+            </thead>
+            <tbody id="optin-tbody">
+              <tr><td colspan="5" class="text-center py-8 text-gray-400">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== UBAH PASSWORD ===== -->
+      <div id="section-password" class="section-panel">
+        <p class="section-title">Ubah Password</p>
+        <p class="section-sub">Ganti password login dashboard.</p>
+        <div class="card max-w-md space-y-4">
+          <div>
+            <label class="form-label">Password Lama</label>
+            <input type="password" id="pw-old" class="form-input" placeholder="Password saat ini">
+          </div>
+          <div>
+            <label class="form-label">Password Baru</label>
+            <input type="password" id="pw-new" class="form-input" placeholder="Password baru">
+          </div>
+          <div>
+            <label class="form-label">Konfirmasi Password Baru</label>
+            <input type="password" id="pw-confirm" class="form-input" placeholder="Ulangi password baru">
+          </div>
+          <div id="pw-err" class="text-sm text-red-600 hidden"></div>
+          <button onclick="changePassword()" class="btn-primary">
+            <i class="fa-solid fa-key"></i> Simpan Password Baru
+          </button>
+        </div>
+      </div>
+
+    </div><!-- end p-8 -->
+  </div><!-- end main-content -->
+</div><!-- end app -->
+
+<script>
+// ============================================================
+// SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'https://pgltsyrtduvddpcdlchk.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnbHRzeXJ0ZHV2ZGRwY2RsY2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MTQ1MjcsImV4cCI6MjA4ODM5MDUyN30.dLVNHeff4wpR3XFg_KwG43x5XEaT0CC2XN4ljxt00C4';
+const BUCKET = 'findofire';
+
+const api = (path, opts = {}) => fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+  headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation', ...opts.headers },
+  ...opts
+}).then(r => r.json());
+
+const storageUpload = (folder, file, blob) => {
+  const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
+  const fname = `${folder}/${Date.now()}.${ext}`;
+  return fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${fname}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': blob.type, 'x-upsert': 'true' },
+    body: blob
+  }).then(r => r.json()).then(d => d.Key ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${fname}` : null);
+};
+
+// ============================================================
+// HASH (SHA-256)
+// ============================================================
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+let currentPwHash = '';
+
+async function doLogin() {
+  const pw = document.getElementById('login-pw').value.trim();
+  if (!pw) return;
+  const hash = await sha256(pw);
+  const rows = await api('findofire_access?select=password_hash&limit=1');
+  if (rows && rows[0] && rows[0].password_hash === hash) {
+    currentPwHash = hash;
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('login-err').classList.add('hidden');
+    initDashboard();
+  } else {
+    document.getElementById('login-err').classList.remove('hidden');
+  }
+}
+
+async function changePassword() {
+  const oldPw = document.getElementById('pw-old').value;
+  const newPw = document.getElementById('pw-new').value;
+  const conf = document.getElementById('pw-confirm').value;
+  const errEl = document.getElementById('pw-err');
+  errEl.classList.add('hidden');
+
+  if (!oldPw || !newPw || !conf) { errEl.textContent='Semua field wajib diisi.'; errEl.classList.remove('hidden'); return; }
+  if (newPw !== conf) { errEl.textContent='Konfirmasi password tidak cocok.'; errEl.classList.remove('hidden'); return; }
+  if (newPw.length < 4) { errEl.textContent='Password minimal 4 karakter.'; errEl.classList.remove('hidden'); return; }
+
+  const oldHash = await sha256(oldPw);
+  if (oldHash !== currentPwHash) { errEl.textContent='Password lama salah.'; errEl.classList.remove('hidden'); return; }
+
+  const newHash = await sha256(newPw);
+  const rows = await api('findofire_access?select=id&limit=1');
+  if (!rows || !rows[0]) { showToast('Gagal memuat data.','error'); return; }
+  await api(`findofire_access?id=eq.${rows[0].id}`, { method:'PATCH', body: JSON.stringify({ password_hash: newHash }) });
+  currentPwHash = newHash;
+  document.getElementById('pw-old').value='';
+  document.getElementById('pw-new').value='';
+  document.getElementById('pw-confirm').value='';
+  showToast('Password berhasil diubah!');
+}
+
+function doLogout() {
+  location.reload();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const sectionTitles = {
+  header:'Header & Logo', hero:'Hero Section', about:'Tentang Kami',
+  katalog:'Katalog & Layanan', legalitas:'Legalitas & Standar', cta:'CTA Section',
+  kontak:'Kontak', trustbar:'Trust Bar', footer:'Footer',
+  optin:'Data Optin', password:'Ubah Password'
+};
+
+function showSection(name) {
+  document.querySelectorAll('.section-panel').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById(`section-${name}`).classList.add('active');
+  document.querySelector(`[data-section="${name}"]`).classList.add('active');
+  document.getElementById('topbar-title').textContent = sectionTitles[name] || name;
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('hidden');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.add('hidden');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const d = document.createElement('div');
+  d.className = `toast-msg ${type}`;
+  d.innerHTML = `<i class="fa-solid fa-${type==='success'?'circle-check':'triangle-exclamation'} mr-2"></i>${msg}`;
+  t.appendChild(d);
+  setTimeout(()=>d.remove(), 3500);
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(html) {
+  document.getElementById('modal-box').innerHTML = html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.getElementById('modal-box').innerHTML = '';
+}
+function closeModalOnOverlay(e) {
+  if(e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ============================================================
+// IMAGE UPLOAD & COMPRESSION
+// ============================================================
+function triggerUpload(inputId) {
+  document.getElementById(inputId).click();
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('dragging');
+}
+
+function handleDrop(e, inputId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragging');
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const dt = new DataTransfer();
+  dt.items.add(file);
+  document.getElementById(inputId).files = dt.files;
+  document.getElementById(inputId).dispatchEvent(new Event('change'));
+}
+
+function handleImageSelect(evt, previewId, callback) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  compressImage(file, 1048576, (blob, dataUrl) => {
+    const img = document.getElementById(previewId);
+    img.src = dataUrl;
+    img.classList.remove('hidden');
+    const wrapId = previewId.replace('-preview', '-preview-wrap');
+    const wrap = document.getElementById(wrapId);
+    if (wrap) wrap.classList.add('hidden');
+    if (callback) callback(blob, file.name);
+  });
+}
+
+function compressImage(file, maxBytes, callback) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      let q = 0.9;
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      const maxDim = 1920;
+      if (w > maxDim || h > maxDim) { const r = Math.min(maxDim/w, maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const tryCompress = () => {
+        canvas.toBlob(blob => {
+          if (!blob) return;
+          if (blob.size <= maxBytes || q <= 0.1) {
+            const url = URL.createObjectURL(blob);
+            callback(blob, url);
+          } else { q -= 0.1; tryCompress(); }
+        }, 'image/webp', q);
+      };
+      tryCompress();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Upload callbacks for single-image fields
+async function uploadToSupabase(blob, folder) {
+  const url = await storageUpload(folder, null, blob);
+  if (!url) { showToast('Upload gagal','error'); return null; }
+  return url;
+}
+
+let pendingUploads = {};
+
+async function updateHeaderLogoUrl(blob) { pendingUploads['header_logo_url'] = { blob, folder:'logo' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
+async function updateHeroBgUrl(blob) { pendingUploads['hero_bg_image'] = { blob, folder:'hero' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
+async function updateAboutImgUrl(blob) { pendingUploads['about_image'] = { blob, folder:'about' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
+async function updateFooterLogoUrl(blob) { pendingUploads['footer_logo_url'] = { blob, folder:'logo' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
+
+// ============================================================
+// SETTINGS CRUD
+// ============================================================
+let settingsCache = {};
+
+async function loadSettings() {
+  const rows = await api('findofire_settings?select=key,value');
+  if (!Array.isArray(rows)) return;
+  rows.forEach(r => { settingsCache[r.key] = r.value || ''; });
+  // Fill all form fields
+  Object.keys(settingsCache).forEach(k => {
+    const el = document.getElementById(`s-${k}`);
+    if (el) {
+      if(el.type === 'checkbox') el.checked = settingsCache[k] === 'true';
+      else el.value = settingsCache[k];
+    }
+  });
+  // Load image previews
+  previewSettingImg('header_logo_url','header-logo-preview','header-logo-preview-wrap');
+  previewSettingImg('hero_bg_image','hero-bg-preview','hero-bg-preview-wrap');
+  previewSettingImg('about_image','about-img-preview','about-img-preview-wrap');
+  previewSettingImg('footer_logo_url','footer-logo-preview','footer-logo-preview-wrap');
+}
+
+function previewSettingImg(key, previewId, wrapId) {
+  const url = settingsCache[key];
+  if (url) {
+    const img = document.getElementById(previewId);
+    const wrap = document.getElementById(wrapId);
+    if (img) { img.src = url; img.classList.remove('hidden'); }
+    if (wrap) wrap.classList.add('hidden');
+  }
+}
+
+async function saveSettings(keys) {
+  const btn = event.target;
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+  btn.disabled = true;
+
+  // Upload any pending images first
+  for (const k of keys) {
+    if (pendingUploads[k]) {
+      const { blob, folder } = pendingUploads[k];
+      const url = await uploadToSupabase(blob, folder);
+      if (url) {
+        document.getElementById(`s-${k}`).value = url;
+        delete pendingUploads[k];
+      }
+    }
+  }
+
+  for (const k of keys) {
+    const el = document.getElementById(`s-${k}`);
+    if (!el) continue;
+    const val = el.type === 'checkbox' ? el.checked.toString() : el.value;
+    // Upsert
+    await fetch(`${SUPABASE_URL}/rest/v1/findofire_settings`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ key: k, value: val, updated_at: new Date().toISOString() })
+    });
+    settingsCache[k] = val;
+  }
+  document.getElementById('last-saved').textContent = 'Tersimpan: ' + new Date().toLocaleTimeString('id-ID');
+  btn.innerHTML = origText; btn.disabled = false;
+  showToast('Data berhasil disimpan!');
+}
+
+// ============================================================
+// HELPER: render active badge
+// ============================================================
+function activeBadge(aktif) {
+  return aktif ? '<span class="badge badge-green">Aktif</span>' : '<span class="badge badge-red">Nonaktif</span>';
+}
+
+// ============================================================
+// CRUD: ABOUT FEATURES
+// ============================================================
+let featuresData = [];
+
+async function loadFeatures() {
+  featuresData = await api('findofire_about_features?select=*&order=urutan.asc');
+  const el = document.getElementById('features-list');
+  if (!featuresData.length) { el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Belum ada data. Klik + Tambah.</p>'; return; }
+  el.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
+  el.innerHTML = featuresData.map(f => `
+    <div class="card p-4 border border-gray-100 hover:border-findored transition-all relative group flex flex-col h-full">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-findored">
+          <i class="${f.icon} text-lg"></i>
+        </div>
+        <div class="overflow-hidden">
+          <p class="font-bold text-gray-900 truncate">${f.title}</p>
+          <p class="text-[10px] text-gray-400">Order: ${f.urutan}</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mb-4 flex-1 line-clamp-3">${f.description}</p>
+      <div class="flex items-center justify-between pt-3 border-t border-gray-50 mt-auto">
+        ${activeBadge(f.aktif)}
+        <div class="flex gap-2">
+          <button class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" onclick="openFeatureModal('${f.id}')"><i class="fa-solid fa-pen text-xs"></i></button>
+          <button class="w-8 h-8 rounded-md bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition" onclick="deleteRow('findofire_about_features','${f.id}',loadFeatures)"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openFeatureModal(id) {
+  const f = id ? featuresData.find(x=>x.id===id) : null;
+  openModal(`
+    <h3 class="font-heading font-bold text-lg mb-5">${f?'Edit':'Tambah'} Fitur Keunggulan</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Icon (FontAwesome class)</label>
+        <input id="m-f-icon" class="form-input" value="${f?.icon||'fa-solid fa-check-circle'}" placeholder="fa-solid fa-check-circle">
+      </div>
+      <div><label class="form-label">Judul</label><input id="m-f-title" class="form-input" value="${f?.title||''}"></div>
+      <div><label class="form-label">Deskripsi</label><textarea id="m-f-desc" class="form-input">${f?.description||''}</textarea></div>
+      <div><label class="form-label">Urutan</label><input id="m-f-urutan" type="number" class="form-input" value="${f?.urutan||0}"></div>
+      <div class="flex items-center gap-3">
+        <label class="toggle-switch"><input type="checkbox" id="m-f-aktif" ${f?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label>
+        <span class="text-sm font-medium text-gray-700">Aktif</span>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button class="btn-primary flex-1 justify-center" onclick="saveFeature('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        <button class="btn-secondary" onclick="closeModal()">Batal</button>
+      </div>
+    </div>`);
+}
+
+async function saveFeature(id) {
+  const payload = {
+    icon: document.getElementById('m-f-icon').value,
+    title: document.getElementById('m-f-title').value,
+    description: document.getElementById('m-f-desc').value,
+    urutan: parseInt(document.getElementById('m-f-urutan').value)||0,
+    aktif: document.getElementById('m-f-aktif').checked
+  };
+  if (id) await api(`findofire_about_features?id=eq.${id}`, {method:'PATCH', body:JSON.stringify(payload)});
+  else await api('findofire_about_features', {method:'POST', body:JSON.stringify(payload)});
+  closeModal(); await loadFeatures(); showToast('Fitur berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: SERVICES (with image upload + sub-items)
+// ============================================================
+let servicesData = [];
+let serviceImgBlob = null;
+
+async function loadServices() {
+  servicesData = await api('findofire_services?select=*&order=urutan.asc');
+  const el = document.getElementById('services-list');
+  if (!servicesData.length) { el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>'; return; }
+  el.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
+  el.innerHTML = servicesData.map(s => `
+    <div class="card p-0 border border-gray-100 hover:border-findored transition-all overflow-hidden flex flex-col h-full">
+      <div class="h-32 bg-gray-100 relative overflow-hidden flex items-center justify-center">
+        ${s.image_url ? `<img src="${s.image_url}" class="w-full h-full object-cover">` : `<i class="${s.icon} text-3xl text-findored/30"></i>`}
+        <div class="absolute top-2 right-2">${activeBadge(s.aktif)}</div>
+      </div>
+      <div class="p-4 flex flex-col flex-1">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <h4 class="font-bold text-sm text-gray-900 line-clamp-1">${s.title}</h4>
+          <span class="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">Ord: ${s.urutan}</span>
+        </div>
+        <p class="text-xs text-gray-500 mb-4 line-clamp-2 flex-1">${s.description || 'Tanpa deskripsi'}</p>
+        <div class="flex items-center gap-2 mb-4">
+          <i class="fa-solid fa-list-ul text-[10px] text-findored"></i>
+          <span class="text-[10px] font-medium text-gray-600">${(s.sub_items||[]).length} Sub-items</span>
+        </div>
+        <div class="flex gap-2 pt-3 border-t border-gray-50">
+          <button class="flex-1 py-1.5 rounded-md bg-blue-50 text-blue-600 text-xs font-bold hover:bg-blue-100 transition" onclick="openServiceModal('${s.id}')"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
+          <button class="w-8 h-8 rounded-md bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition" onclick="deleteRow('findofire_services','${s.id}',loadServices)"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openServiceModal(id) {
+  serviceImgBlob = null;
+  const s = id ? servicesData.find(x=>x.id===id) : null;
+  const subItems = s?.sub_items || [];
+  const subHtml = subItems.map((si,i)=>`<div class="sub-item-row"><input class="form-input sub-item-input" value="${si.text||''}"><button type="button" class="btn-danger py-1 px-2" onclick="this.parentElement.remove()"><i class="fa-solid fa-minus"></i></button></div>`).join('');
+  
+  const galItems = s?.gallery_images || [];
+  const galHtml = galItems.map((g,i)=> {
+    const url = typeof g === 'string' ? g : (g.url || '');
+    const title = typeof g === 'string' ? '' : (g.title || '');
+    if (!url) return '';
+    return `<div class="sub-item-row flex-col items-start gap-1 p-3 border border-gray-200 rounded-lg bg-gray-50 mb-3 shadow-sm">
+      <div class="flex w-full gap-2">
+        <input class="form-input gal-item-input flex-1" value="${url}" placeholder="URL Gambar/Video">
+        <button type="button" class="btn-danger py-1 px-3 h-auto rounded" onclick="this.closest('.sub-item-row').remove()"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <input class="form-input gal-item-title w-full text-sm" value="${title}" placeholder="Judul / Keterangan teks untuk media ini (opsional)">
+    </div>`;
+  }).join('');
+
+  openModal(`
+    <h3 class="font-heading font-bold text-lg mb-5">${s?'Edit':'Tambah'} Layanan</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Layanan</label><input id="m-s-title" class="form-input" value="${s?.title||''}"></div>
+      <div><label class="form-label">Deskripsi</label><textarea id="m-s-desc" class="form-input">${s?.description||''}</textarea></div>
+      <div><label class="form-label">Icon (FA class)</label><input id="m-s-icon" class="form-input" value="${s?.icon||'fa-solid fa-fire'}"></div>
+      <div>
+        <label class="form-label">Gambar Layanan</label>
+        <div class="upload-area mb-2" onclick="document.getElementById('m-s-img-file').click()" ondragover="handleDragOver(event)" ondrop="handleServiceImgDrop(event)">
+          <div id="m-s-img-wrap">${s?.image_url?`<img src="${s.image_url}" class="img-preview mx-auto">`:'<i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-1"></i><p class="text-sm text-gray-500">Klik atau drag & drop</p>'}</div>
+          <img id="m-s-img-preview" class="img-preview hidden mt-2 mx-auto">
+        </div>
+        <input type="file" id="m-s-img-file" accept="image/*" onchange="handleServiceImgSelect(event)">
+        <input type="text" id="m-s-img-url" class="form-input mt-2" value="${s?.image_url||''}" placeholder="Atau masukkan URL gambar">
+      </div>
+      <div>
+        <label class="form-label">Sub-Item Layanan</label>
+        <div id="sub-items-container">${subHtml}</div>
+        <button type="button" class="btn-secondary mt-2 text-sm py-2" onclick="addSubItem()"><i class="fa-solid fa-plus"></i> Tambah Sub-Item</button>
+      </div>
+      <div class="pt-2 border-t border-gray-100">
+        <label class="form-label">Galeri Foto (Max 30)</label>
+        <div id="gal-items-container">${galHtml}</div>
+        <div class="mt-2 flex gap-2 items-center flex-wrap">
+          <button type="button" class="btn-secondary text-sm py-2 group" onclick="addGalItem()">
+            <i class="fa-solid fa-link text-gray-500"></i> Tambah URL Manual
+          </button>
+          <label class="btn-primary text-sm py-2 cursor-pointer m-0 inline-flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Upload Foto
+              <input type="file" multiple accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
+          </label>
+          <span id="gal-upload-status" class="text-xs text-gray-500 font-medium"></span>
+        </div>
+      </div>
+      <div><label class="form-label">Urutan</label><input id="m-s-urutan" type="number" class="form-input" value="${s?.urutan||0}"></div>
+      <div class="flex items-center gap-3">
+        <label class="toggle-switch"><input type="checkbox" id="m-s-aktif" ${s?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label>
+        <span class="text-sm font-medium text-gray-700">Aktif</span>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button class="btn-primary flex-1 justify-center" onclick="saveService('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        <button class="btn-secondary" onclick="closeModal()">Batal</button>
+      </div>
+    </div>`);
+}
+
+function addSubItem() {
+  const c = document.getElementById('sub-items-container');
+  const div = document.createElement('div'); div.className='sub-item-row';
+  div.innerHTML=`<input class="form-input sub-item-input" placeholder="Teks sub-item..."><button type="button" class="btn-danger py-1 px-2" onclick="this.parentElement.remove()"><i class="fa-solid fa-minus"></i></button>`;
+  c.appendChild(div);
+}
+
+function addGalItem() {
+  const c = document.getElementById('gal-items-container');
+  if (c.childElementCount >= 30) {
+      showToast('Maksimal 30 foto galeri', 'error');
+      return;
+  }
+  const div = document.createElement('div');
+  div.className='sub-item-row flex-col items-start gap-1 p-3 border border-gray-200 rounded-lg bg-gray-50 mb-3 shadow-sm';
+  div.innerHTML=`<div class="flex w-full gap-2"><input class="form-input gal-item-input flex-1" placeholder="https://... URL gambar atau video"><button type="button" class="btn-danger py-1 px-3 h-auto rounded" onclick="this.closest('.sub-item-row').remove()"><i class="fa-solid fa-trash"></i></button></div><input class="form-input gal-item-title w-full text-sm" placeholder="Judul / Keterangan teks untuk media ini (opsional)">`;
+  c.appendChild(div);
+}
+
+async function handleGalleryUpload(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+  const c = document.getElementById('gal-items-container');
+  if (c.childElementCount + files.length > 30) {
+      showToast('Total maksimal 30 foto. Kurangi file yang diupload.', 'error');
+      return;
+  }
+  const status = document.getElementById('gal-upload-status');
+  status.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengupload ${files.length} gambar...`;
+  
+  for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      await new Promise(resolve => {
+          compressImage(file, 1048576, async (blob, dataUrl) => {
+              const url = await uploadToSupabase(blob, 'services'); // Uploading to 'services' bucket folder
+              if (url) {
+                  const div = document.createElement('div');
+                  div.className='sub-item-row flex-col items-start gap-1 p-3 border border-gray-200 rounded-lg bg-gray-50 mb-3 shadow-sm';
+                  div.innerHTML=`<div class="flex w-full gap-2"><input class="form-input gal-item-input flex-1" value="${url}"><button type="button" class="btn-danger py-1 px-3 h-auto rounded" onclick="this.closest('.sub-item-row').remove()"><i class="fa-solid fa-trash"></i></button></div><input class="form-input gal-item-title w-full text-sm" placeholder="Judul / Keterangan teks untuk gambar ini (opsional)">`;
+                  c.appendChild(div);
+              }
+              resolve();
+          });
+      });
+  }
+  status.textContent = `Selesai mengupload ${files.length} gambar.`;
+  e.target.value = '';
+}
+
+function handleServiceImgDrop(e) { e.preventDefault(); const f=e.dataTransfer.files[0]; if(!f||!f.type.startsWith('image/'))return; compressImage(f,1048576,(blob,url)=>{ serviceImgBlob=blob; const p=document.getElementById('m-s-img-preview'); p.src=url; p.classList.remove('hidden'); document.getElementById('m-s-img-wrap').classList.add('hidden');}); }
+function handleServiceImgSelect(e) { const f=e.target.files[0]; if(!f)return; compressImage(f,1048576,(blob,url)=>{ serviceImgBlob=blob; const p=document.getElementById('m-s-img-preview'); p.src=url; p.classList.remove('hidden'); document.getElementById('m-s-img-wrap').classList.add('hidden');}); }
+
+async function saveService(id) {
+  let imgUrl = document.getElementById('m-s-img-url').value;
+  if (serviceImgBlob) {
+    const u = await uploadToSupabase(serviceImgBlob,'services');
+    if (u) imgUrl = u;
+  }
+  const subInputs = document.querySelectorAll('.sub-item-input');
+  const subItems = Array.from(subInputs).filter(i=>i.value.trim()).map(i=>({text:i.value.trim()}));
+
+  const galRows = document.querySelectorAll('#gal-items-container .sub-item-row');
+  const galleryImages = Array.from(galRows).map(row => {
+    return {
+      url: row.querySelector('.gal-item-input') ? row.querySelector('.gal-item-input').value.trim() : '',
+      title: row.querySelector('.gal-item-title') ? row.querySelector('.gal-item-title').value.trim() : ''
+    };
+  }).filter(g => g.url !== '');
+
+  const payload = {
+    title: document.getElementById('m-s-title').value,
+    description: document.getElementById('m-s-desc').value,
+    icon: document.getElementById('m-s-icon').value,
+    image_url: imgUrl,
+    sub_items: subItems,
+    gallery_images: galleryImages,
+    urutan: parseInt(document.getElementById('m-s-urutan').value)||0,
+    aktif: document.getElementById('m-s-aktif').checked
+  };
+  if (id) await api(`findofire_services?id=eq.${id}`, {method:'PATCH', body:JSON.stringify(payload)});
+  else await api('findofire_services', {method:'POST', body:JSON.stringify(payload)});
+  closeModal(); await loadServices(); showToast('Layanan berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: CERTIFICATES
+// ============================================================
+let certsData = [];
+let certImgBlob = null;
+
+async function loadCerts() {
+  certsData = await api('findofire_certificates?select=*&order=urutan.asc');
+  const el = document.getElementById('certs-list');
+  if (!certsData.length) { el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>'; return; }
+  el.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
+  el.innerHTML = certsData.map(c => `
+    <div class="card p-4 border border-gray-100 hover:border-findored transition-all flex flex-col h-full">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden">
+          ${c.image_url ? `<img src="${c.image_url}" class="w-full h-full object-contain">` : `<i class="${c.icon} ${c.icon_color} text-lg"></i>`}
+        </div>
+        <div class="overflow-hidden">
+          <p class="font-bold text-sm text-gray-900 truncate">${c.title}</p>
+          <span class="text-[10px] text-gray-400">Ord: ${c.urutan}</span>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mb-4 flex-1 line-clamp-2">${c.description || 'No description'}</p>
+      <div class="flex items-center justify-between pt-3 border-t border-gray-50 mt-auto">
+        ${activeBadge(c.aktif)}
+        <div class="flex gap-2">
+          <button class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" onclick="openCertModal('${c.id}')"><i class="fa-solid fa-pen text-xs"></i></button>
+          <button class="w-8 h-8 rounded-md bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition" onclick="deleteRow('findofire_certificates','${c.id}',loadCerts)"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openCertModal(id) {
+  certImgBlob=null;
+  const c = id ? certsData.find(x=>x.id===id) : null;
+  openModal(`
+    <h3 class="font-heading font-bold text-lg mb-5">${c?'Edit':'Tambah'} Sertifikat</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Sertifikat</label><input id="m-c-title" class="form-input" value="${c?.title||''}"></div>
+      <div><label class="form-label">Deskripsi</label><input id="m-c-desc" class="form-input" value="${c?.description||''}"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="form-label">Icon (FA class)</label><input id="m-c-icon" class="form-input" value="${c?.icon||'fa-solid fa-ribbon'}"></div>
+        <div><label class="form-label">Warna Icon (Tailwind class)</label><input id="m-c-color" class="form-input" value="${c?.icon_color||'text-blue-600'}" placeholder="text-blue-600"></div>
+      </div>
+      <div>
+        <label class="form-label">Gambar Sertifikat (opsional)</label>
+        <div class="upload-area mb-2" onclick="document.getElementById('m-c-img-file').click()">
+          ${c?.image_url?`<img src="${c.image_url}" class="img-preview mx-auto">`:'<i class="fa-solid fa-cloud-arrow-up text-gray-400 text-xl"></i><p class="text-sm text-gray-500 mt-1">Klik untuk upload</p>'}
+          <img id="m-c-img-preview" class="img-preview hidden mt-2 mx-auto">
+        </div>
+        <input type="file" id="m-c-img-file" accept="image/*" onchange="handleCertImgSelect(event)">
+        <input type="text" id="m-c-img-url" class="form-input mt-2" value="${c?.image_url||''}" placeholder="Atau paste URL gambar">
+      </div>
+      <div><label class="form-label">Urutan</label><input id="m-c-urutan" type="number" class="form-input" value="${c?.urutan||0}"></div>
+      <div class="flex items-center gap-3">
+        <label class="toggle-switch"><input type="checkbox" id="m-c-aktif" ${c?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label>
+        <span class="text-sm font-medium text-gray-700">Aktif</span>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button class="btn-primary flex-1 justify-center" onclick="saveCert('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        <button class="btn-secondary" onclick="closeModal()">Batal</button>
+      </div>
+    </div>`);
+}
+function handleCertImgSelect(e) { const f=e.target.files[0]; if(!f)return; compressImage(f,1048576,(blob,url)=>{ certImgBlob=blob; document.getElementById('m-c-img-preview').src=url; document.getElementById('m-c-img-preview').classList.remove('hidden');}); }
+async function saveCert(id) {
+  let imgUrl = document.getElementById('m-c-img-url').value;
+  if(certImgBlob){ const u=await uploadToSupabase(certImgBlob,'certificates'); if(u)imgUrl=u; }
+  const payload = { title:document.getElementById('m-c-title').value, description:document.getElementById('m-c-desc').value, icon:document.getElementById('m-c-icon').value, icon_color:document.getElementById('m-c-color').value, image_url:imgUrl, urutan:parseInt(document.getElementById('m-c-urutan').value)||0, aktif:document.getElementById('m-c-aktif').checked };
+  if(id) await api(`findofire_certificates?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_certificates',{method:'POST',body:JSON.stringify(payload)});
+  closeModal(); await loadCerts(); showToast('Sertifikat berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: TRUST CLIENTS
+// ============================================================
+let clientsData = [];
+async function loadClients() {
+  clientsData = await api('findofire_trust_clients?select=*&order=urutan.asc');
+  const el = document.getElementById('clients-list');
+  if(!clientsData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>';return;}
+  el.innerHTML = clientsData.map(c=>`
+    <div class="table-row" style="grid-template-columns:1fr auto auto auto">
+      <p class="font-semibold text-sm text-gray-800">${c.name}</p>
+      ${activeBadge(c.aktif)}
+      <button class="btn-edit" onclick="openClientModal('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn-danger" onclick="deleteRow('findofire_trust_clients','${c.id}',loadClients)"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('');
+}
+function openClientModal(id) {
+  const c = id?clientsData.find(x=>x.id===id):null;
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${c?'Edit':'Tambah'} Klien</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Instansi / Perusahaan</label><input id="m-cl-name" class="form-input" value="${c?.name||''}"></div>
+      <div><label class="form-label">Urutan</label><input id="m-cl-urutan" type="number" class="form-input" value="${c?.urutan||0}"></div>
+      <div class="flex items-center gap-3"><label class="toggle-switch"><input type="checkbox" id="m-cl-aktif" ${c?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveClient('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+async function saveClient(id) {
+  const payload={name:document.getElementById('m-cl-name').value,urutan:parseInt(document.getElementById('m-cl-urutan').value)||0,aktif:document.getElementById('m-cl-aktif').checked};
+  if(id)await api(`findofire_trust_clients?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_trust_clients',{method:'POST',body:JSON.stringify(payload)});
+  closeModal();await loadClients();showToast('Klien berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: CONTACT SERVICES
+// ============================================================
+let contactServicesData = [];
+async function loadContactServices() {
+  contactServicesData = await api('findofire_contact_services?select=*&order=urutan.asc');
+  const el = document.getElementById('contact-services-list');
+  if(!contactServicesData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>';return;}
+  el.innerHTML = contactServicesData.map(c=>`
+    <div class="table-row" style="grid-template-columns:1fr 100px auto auto auto">
+      <p class="font-semibold text-sm text-gray-800">${c.label}</p>
+      <p class="text-xs text-gray-400">${c.value}</p>
+      ${activeBadge(c.aktif)}
+      <button class="btn-edit" onclick="openContactServiceModal('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn-danger" onclick="deleteRow('findofire_contact_services','${c.id}',loadContactServices)"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('');
+}
+function openContactServiceModal(id) {
+  const c=id?contactServicesData.find(x=>x.id===id):null;
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${c?'Edit':'Tambah'} Opsi Layanan</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Label (tampilan di dropdown)</label><input id="m-cs-label" class="form-input" value="${c?.label||''}"></div>
+      <div><label class="form-label">Value (nilai internal)</label><input id="m-cs-value" class="form-input" value="${c?.value||''}"></div>
+      <div><label class="form-label">Urutan</label><input id="m-cs-urutan" type="number" class="form-input" value="${c?.urutan||0}"></div>
+      <div class="flex items-center gap-3"><label class="toggle-switch"><input type="checkbox" id="m-cs-aktif" ${c?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveContactService('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+async function saveContactService(id) {
+  const payload={label:document.getElementById('m-cs-label').value,value:document.getElementById('m-cs-value').value,urutan:parseInt(document.getElementById('m-cs-urutan').value)||0,aktif:document.getElementById('m-cs-aktif').checked};
+  if(id)await api(`findofire_contact_services?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_contact_services',{method:'POST',body:JSON.stringify(payload)});
+  closeModal();await loadContactServices();showToast('Opsi berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: FOOTER SERVICES
+// ============================================================
+let footerServicesData = [];
+async function loadFooterServices() {
+  footerServicesData = await api('findofire_footer_services?select=*&order=urutan.asc');
+  const el = document.getElementById('footer-services-list');
+  if(!footerServicesData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>';return;}
+  el.innerHTML = footerServicesData.map(s=>`
+    <div class="table-row" style="grid-template-columns:1fr auto auto auto">
+      <p class="font-semibold text-sm text-gray-800">${s.label}</p>
+      ${activeBadge(s.aktif)}
+      <button class="btn-edit" onclick="openFooterServiceModal('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn-danger" onclick="deleteRow('findofire_footer_services','${s.id}',loadFooterServices)"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('');
+}
+function openFooterServiceModal(id) {
+  const s=id?footerServicesData.find(x=>x.id===id):null;
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${s?'Edit':'Tambah'} Layanan Footer</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Layanan</label><input id="m-fs-label" class="form-input" value="${s?.label||''}"></div>
+      <div><label class="form-label">Urutan</label><input id="m-fs-urutan" type="number" class="form-input" value="${s?.urutan||0}"></div>
+      <div class="flex items-center gap-3"><label class="toggle-switch"><input type="checkbox" id="m-fs-aktif" ${s?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      <p class="text-xs text-gray-400">Klik di frontend → WA: "Saya mau konsultasi tentang [nama layanan]"</p>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveFooterService('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+async function saveFooterService(id) {
+  const payload={label:document.getElementById('m-fs-label').value,urutan:parseInt(document.getElementById('m-fs-urutan').value)||0,aktif:document.getElementById('m-fs-aktif').checked};
+  if(id)await api(`findofire_footer_services?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_footer_services',{method:'POST',body:JSON.stringify(payload)});
+  closeModal();await loadFooterServices();showToast('Layanan footer berhasil disimpan!');
+}
+
+// ============================================================
+// CRUD: SOCIAL MEDIA
+// ============================================================
+let socialData = [];
+async function loadSocial() {
+  socialData = await api('findofire_social_media?select=*&order=urutan.asc');
+  const el = document.getElementById('social-list');
+  if(!socialData.length){el.innerHTML='<p class="text-sm text-gray-400 text-center py-6">Belum ada data.</p>';return;}
+  el.innerHTML = socialData.map(s=>`
+    <div class="table-row" style="grid-template-columns:32px 1fr auto auto auto">
+      <i class="${s.icon} text-findored text-lg"></i>
+      <div><p class="font-semibold text-sm text-gray-800">${s.platform}</p><p class="text-xs text-gray-400 truncate max-w-xs">${s.url}</p></div>
+      ${activeBadge(s.aktif)}
+      <button class="btn-edit" onclick="openSocialModal('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn-danger" onclick="deleteRow('findofire_social_media','${s.id}',loadSocial)"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('');
+}
+function openSocialModal(id) {
+  const s=id?socialData.find(x=>x.id===id):null;
+  openModal(`<h3 class="font-heading font-bold text-lg mb-5">${s?'Edit':'Tambah'} Media Sosial</h3>
+    <div class="space-y-4">
+      <div><label class="form-label">Nama Platform</label><input id="m-sm-platform" class="form-input" value="${s?.platform||''}" placeholder="Facebook"></div>
+      <div><label class="form-label">Icon (FA class)</label><input id="m-sm-icon" class="form-input" value="${s?.icon||''}" placeholder="fa-brands fa-facebook-f"></div>
+      <div><label class="form-label">URL Profil</label><input id="m-sm-url" class="form-input" value="${s?.url||''}" placeholder="https://facebook.com/..."></div>
+      <div><label class="form-label">Urutan</label><input id="m-sm-urutan" type="number" class="form-input" value="${s?.urutan||0}"></div>
+      <div class="flex items-center gap-3"><label class="toggle-switch"><input type="checkbox" id="m-sm-aktif" ${s?.aktif!==false?'checked':''}><span class="toggle-slider"></span></label><span class="text-sm font-medium text-gray-700">Aktif</span></div>
+      <div class="flex gap-3 pt-2"><button class="btn-primary flex-1 justify-center" onclick="saveSocial('${id||''}')"><i class="fa-solid fa-floppy-disk"></i> Simpan</button><button class="btn-secondary" onclick="closeModal()">Batal</button></div>
+    </div>`);
+}
+async function saveSocial(id) {
+  const payload={platform:document.getElementById('m-sm-platform').value,icon:document.getElementById('m-sm-icon').value,url:document.getElementById('m-sm-url').value,urutan:parseInt(document.getElementById('m-sm-urutan').value)||0,aktif:document.getElementById('m-sm-aktif').checked};
+  if(id)await api(`findofire_social_media?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(payload)});
+  else await api('findofire_social_media',{method:'POST',body:JSON.stringify(payload)});
+  closeModal();await loadSocial();showToast('Media sosial berhasil disimpan!');
+}
+
+// ============================================================
+// READ-ONLY: OPTIN TABLE
+// ============================================================
+async function loadOptin() {
+  const rows = await api('findofire_optin?select=*&order=created_at.desc');
+  const tbody = document.getElementById('optin-tbody');
+  if (!rows || !rows.length) { tbody.innerHTML='<tr><td colspan="5" class="text-center py-8 text-gray-400">Belum ada data masuk.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r=>`
+    <tr class="border-b border-gray-100 hover:bg-gray-50">
+      <td class="py-3 px-3 text-xs text-gray-500">${new Date(r.created_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}<br>${new Date(r.created_at).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</td>
+      <td class="py-3 px-3 font-medium text-gray-800">${r.nama}</td>
+      <td class="py-3 px-3 text-gray-600">${r.telepon}</td>
+      <td class="py-3 px-3 text-gray-600">${r.layanan}</td>
+      <td class="py-3 px-3 text-gray-500 text-xs max-w-xs truncate">${r.pesan||'-'}</td>
+    </tr>`).join('');
+}
+
+// ============================================================
+// GENERIC DELETE
+// ============================================================
+async function deleteRow(table, id, reloadFn) {
+  if (!confirm('Hapus item ini?')) return;
+  await api(`${table}?id=eq.${id}`, {method:'DELETE'});
+  await reloadFn();
+  showToast('Item berhasil dihapus!');
+}
+
+// ============================================================
+// INIT DASHBOARD
+// ============================================================
+async function initDashboard() {
+  await loadSettings();
+  await Promise.all([
+    loadFeatures(),
+    loadServices(),
+    loadCerts(),
+    loadClients(),
+    loadContactServices(),
+    loadFooterServices(),
+    loadSocial(),
+    loadOptin()
+  ]);
+}
+</script>
+</body>
+</html>
