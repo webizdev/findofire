@@ -232,6 +232,14 @@
               <label class="form-label">Deskripsi Hero</label>
               <textarea id="s-hero_subtitle" class="form-input"></textarea>
             </div>
+            <div>
+              <label class="form-label">Transparansi Hero Overlay (0.0 - 1.0)</label>
+              <div class="flex items-center gap-4">
+                <input type="range" id="s-hero_overlay_opacity" class="flex-1 accent-findored" min="0" max="1" step="0.05" value="0.85" oninput="this.nextElementSibling.textContent = this.value">
+                <span class="text-sm font-bold text-gray-700 w-8">0.85</span>
+              </div>
+              <p class="text-xs text-gray-400 mt-1">Semakin besar semakin gelap (kontras teks lebih tinggi).</p>
+            </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="form-label">Teks Tombol Primer</label>
@@ -252,7 +260,7 @@
                 <input type="text" id="s-hero_btn_secondary_link" class="form-input" placeholder="#services">
               </div>
             </div>
-            <button onclick="saveSettings(['hero_badge_text','hero_title','hero_subtitle','hero_btn_primary_text','hero_btn_primary_link','hero_btn_secondary_text','hero_btn_secondary_link'])" class="btn-primary">
+            <button onclick="saveSettings(['hero_badge_text','hero_title','hero_subtitle','hero_overlay_opacity','hero_btn_primary_text','hero_btn_primary_link','hero_btn_secondary_text','hero_btn_secondary_link'])" class="btn-primary">
               <i class="fa-solid fa-floppy-disk"></i> Simpan Teks Hero
             </button>
           </div>
@@ -996,7 +1004,12 @@ async function loadSettings() {
     const el = document.getElementById(`s-${k}`);
     if (el) {
       if(el.type === 'checkbox') el.checked = settingsCache[k] === 'true';
-      else el.value = settingsCache[k];
+      else {
+        el.value = settingsCache[k];
+        if (el.type === 'range' && el.nextElementSibling && el.nextElementSibling.tagName === 'SPAN') {
+          el.nextElementSibling.textContent = el.value;
+        }
+      }
     }
   });
   // Load image previews

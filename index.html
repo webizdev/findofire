@@ -724,6 +724,11 @@
             const setEl = (id,val) => { if(document.getElementById(id)&&val) document.getElementById(id).textContent=val; };
             const heroBg = getSetting(settings,'hero_bg_image');
             if(heroBg) document.getElementById('hero-bg').src=heroBg;
+            const heroOpacity = getSetting(settings, 'hero_overlay_opacity', '0.85');
+            const overlayEl = document.querySelector('.hero-overlay');
+            if (overlayEl) {
+                overlayEl.style.background = `linear-gradient(rgba(30, 30, 30, ${heroOpacity}), rgba(30, 30, 30, ${parseFloat(heroOpacity) * 0.6}))`;
+            }
             setEl('hero-badge', getSetting(settings,'hero_badge_text'));
             const heroTitleVal = getSetting(settings,'hero_title');
             if(heroTitleVal) document.getElementById('hero-title').innerHTML=heroTitleVal;
