@@ -728,6 +728,9 @@
             if(ctaInaproc) {
                 const specificLink = getSetting(settings, 'cta_inaproc_link');
                 ctaInaproc.href = specificLink || inaprocLink;
+                const specificLogo = getSetting(settings, 'cta_inaproc_logo');
+                const logoImg = ctaInaproc.querySelector('img');
+                if (logoImg) logoImg.src = specificLogo || 'assets/logo-inaproc.jpg';
             }
 
             // HERO

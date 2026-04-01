@@ -537,7 +537,21 @@
             <label class="form-label">Link Tombol INAPROC</label>
             <input type="text" id="s-cta_inaproc_link" class="form-input" placeholder="https://inaproc.id/...">
           </div>
-          <button onclick="saveSettings(['cta_title','cta_description','cta_button_text','cta_button_link','cta_inaproc_link'])" class="btn-primary">
+          <div>
+            <label class="form-label font-bold">Logo INAPROC CTA</label>
+            <div class="flex items-start gap-4">
+              <div id="cta-inaproc-logo-preview-wrap" class="w-20 h-20 bg-gray-50 border-2 border-dashed border-gray-200 rounded flex items-center justify-center overflow-hidden">
+                <i class="fa-solid fa-image text-2xl text-gray-300"></i>
+                <img id="cta-inaproc-logo-preview" class="w-full h-full object-contain hidden" alt="Logo Preview">
+              </div>
+              <div class="flex-1">
+                <input type="file" accept="image/*" class="text-xs mb-2" onchange="handleImageSelect(event,'cta-inaproc-logo-preview',updateCtaInaprocLogoUrl)">
+                <input type="text" id="s-cta_inaproc_logo" class="form-input text-xs" readonly placeholder="URL Logo akan muncul di sini">
+                <p class="text-[10px] text-gray-400 mt-1">Kosongkan untuk menggunakan logo default (assets/logo-inaproc.jpg).</p>
+              </div>
+            </div>
+          </div>
+          <button onclick="saveSettings(['cta_title','cta_description','cta_button_text','cta_button_link','cta_inaproc_link','cta_inaproc_logo'])" class="btn-primary">
             <i class="fa-solid fa-floppy-disk"></i> Simpan CTA
           </button>
         </div>
@@ -997,6 +1011,7 @@ async function updateHeaderLogoUrl(blob) { pendingUploads['header_logo_url'] = {
 async function updateHeroBgUrl(blob) { pendingUploads['hero_bg_image'] = { blob, folder:'hero' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
 async function updateAboutImgUrl(blob) { pendingUploads['about_image'] = { blob, folder:'about' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
 async function updateFooterLogoUrl(blob) { pendingUploads['footer_logo_url'] = { blob, folder:'logo' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
+async function updateCtaInaprocLogoUrl(blob) { pendingUploads['cta_inaproc_logo'] = { blob, folder:'logo' }; showToast('Gambar siap, klik Simpan untuk upload.','success'); }
 
 // ============================================================
 // SETTINGS CRUD
@@ -1025,6 +1040,7 @@ async function loadSettings() {
   previewSettingImg('hero_bg_image','hero-bg-preview','hero-bg-preview-wrap');
   previewSettingImg('about_image','about-img-preview','about-img-preview-wrap');
   previewSettingImg('footer_logo_url','footer-logo-preview','footer-logo-preview-wrap');
+  previewSettingImg('cta_inaproc_logo','cta-inaproc-logo-preview','cta-inaproc-logo-preview-wrap');
 }
 
 function previewSettingImg(key, previewId, wrapId) {
