@@ -725,7 +725,10 @@
             document.getElementById('inaproc-link-desktop').href = inaprocLink;
             document.getElementById('inaproc-link-mobile').href = inaprocLink;
             const ctaInaproc = document.getElementById('cta-inaproc-btn');
-            if(ctaInaproc) ctaInaproc.href = inaprocLink;
+            if(ctaInaproc) {
+                const specificLink = getSetting(settings, 'cta_inaproc_link');
+                ctaInaproc.href = specificLink || inaprocLink;
+            }
 
             // HERO
             const setEl = (id,val) => { if(document.getElementById(id)&&val) document.getElementById(id).textContent=val; };
