@@ -540,14 +540,17 @@
           <div>
             <label class="form-label font-bold">Logo INAPROC CTA</label>
             <div class="flex items-start gap-4">
-              <div id="cta-inaproc-logo-preview-wrap" class="w-20 h-20 bg-gray-50 border-2 border-dashed border-gray-200 rounded flex items-center justify-center overflow-hidden">
+              <div id="cta-inaproc-logo-preview-wrap" class="w-20 h-20 bg-gray-50 border-2 border-dashed border-gray-200 rounded flex items-center justify-center overflow-hidden cursor-pointer hover:border-findored transition-colors" onclick="triggerUpload('cta-inaproc-logo-file')">
                 <i class="fa-solid fa-image text-2xl text-gray-300"></i>
                 <img id="cta-inaproc-logo-preview" class="w-full h-full object-contain hidden" alt="Logo Preview">
               </div>
               <div class="flex-1">
-                <input type="file" accept="image/*" class="text-xs mb-2" onchange="handleImageSelect(event,'cta-inaproc-logo-preview',updateCtaInaprocLogoUrl)">
+                <button type="button" class="btn-secondary text-xs py-1 px-3 mb-2" onclick="triggerUpload('cta-inaproc-logo-file')">
+                  <i class="fa-solid fa-upload mr-1"></i> Pilih Gambar
+                </button>
+                <input type="file" id="cta-inaproc-logo-file" accept="image/*" class="hidden" onchange="handleImageSelect(event,'cta-inaproc-logo-preview',updateCtaInaprocLogoUrl)">
                 <input type="text" id="s-cta_inaproc_logo" class="form-input text-xs" readonly placeholder="URL Logo akan muncul di sini">
-                <p class="text-[10px] text-gray-400 mt-1">Kosongkan untuk menggunakan logo default (assets/logo-inaproc.jpg).</p>
+                <p class="text-[10px] text-gray-400 mt-1">Gunakan gambar rasio 1:1. Kosongkan untuk logo default.</p>
               </div>
             </div>
           </div>
