@@ -300,6 +300,9 @@
                                     Mustika Jaya, Kec. Bekasi Timur,<br>
                                     Kota Bekasi, Jawa Barat.
                                 </p>
+                                <a id="contact-maps-link" href="https://maps.app.goo.gl/EcygccUDMwDEG9YZ7" target="_blank" class="text-findored text-sm font-semibold hover:underline mt-2 inline-block">
+                                    <i class="fa-solid fa-up-right-from-square mr-1"></i> Buka di Google Maps
+                                </a>
                             </div>
                         </div>
 
@@ -347,10 +350,9 @@
                 </div>
 
                 <!-- Google Maps Embed -->
-                <div class="h-[300px] sm:h-full min-h-[300px] sm:min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 order-first lg:order-last mb-6 lg:mb-0">
-                    <!-- Menggunakan keyword pencarian "PT. New Trifindo Utama Bekasi" untuk iframe -->
+                <div id="map-container" class="h-[300px] sm:h-full min-h-[300px] sm:min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-200 order-first lg:order-last mb-6 lg:mb-0">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.9220972412586!2d107.0216659!3d-6.2739462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698e3b33075c75%3A0xc3f6e1df7f73db50!2sJl.%20Mandor%20Demong%20No.9%2C%20RT.004%2FRW.003%2C%20Mustikasari%2C%20Kec.%20Mustika%20Jaya%2C%20Kota%20Bks%2C%20Jawa%20Barat%2017157!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3965.7347862359543!2d107.0030346!3d-6.29853983!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69935b3ac681c9%3A0xc8bacf1fedb403e7!2sPT.%20New%20Trifindo%20Utama!5e0!3m2!1sen!2sid!4v1775012293549!5m2!1sen!2sid" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
@@ -936,8 +938,20 @@
             setEl('contact-wa-text', cWa);
             const cEmail = getSetting(settings,'contact_email');
             if(cEmail) { const eLink = document.getElementById('contact-email-link'); if(eLink) eLink.href=`mailto:${cEmail}`; setEl('contact-email-text', cEmail); }
-            const mapsUrl = getSetting(settings,'contact_maps_url');
-            if(mapsUrl) { const mapFrame = document.querySelector('#contact iframe'); if(mapFrame) mapFrame.src = mapsUrl; }
+            const mapsEmbed = getSetting(settings,'contact_maps_embed');
+            if(mapsEmbed) {
+                const mapCont = document.getElementById('map-container');
+                if (mapsEmbed.includes('<iframe')) {
+                    mapCont.innerHTML = mapsEmbed;
+                    const frame = mapCont.querySelector('iframe');
+                    if (frame) { frame.style.width = '100%'; frame.style.height = '100%'; frame.style.border = '0'; }
+                } else {
+                    const frame = mapCont.querySelector('iframe');
+                    if (frame) frame.src = mapsEmbed;
+                }
+            }
+            const mapsShareUrl = getSetting(settings,'contact_maps_share_url');
+            if(mapsShareUrl) { const mapLink = document.getElementById('contact-maps-link'); if(mapLink) mapLink.href = mapsShareUrl; }
             setEl('contact-form-title', getSetting(settings,'contact_form_title'));
             const contactSvcsEl = document.getElementById('optin-layanan');
             contactSvcs.forEach(cs => { const o=document.createElement('option'); o.value=cs.value; o.textContent=cs.label; contactSvcsEl.appendChild(o); });

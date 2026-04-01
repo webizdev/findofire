@@ -594,7 +594,11 @@
               <label class="form-label">URL Embed Google Maps</label>
               <textarea id="s-contact_maps_embed" class="form-input" rows="3" placeholder="https://www.google.com/maps/embed?pb=..."></textarea>
             </div>
-            <button onclick="saveSettings(['contact_form_title','contact_maps_embed'])" class="btn-primary">
+            <div>
+              <label class="form-label">URL Share Google Maps (Link "Buka di Maps")</label>
+              <input type="text" id="s-contact_maps_share_url" class="form-input" placeholder="https://maps.app.goo.gl/...">
+            </div>
+            <button onclick="saveSettings(['contact_form_title','contact_maps_embed','contact_maps_share_url'])" class="btn-primary">
               <i class="fa-solid fa-floppy-disk"></i> Simpan Maps & Form
             </button>
           </div>
